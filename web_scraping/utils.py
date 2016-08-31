@@ -6,7 +6,7 @@ from django.forms import model_to_dict
 from django.http import JsonResponse
 
 from .models import Domain, News, Comment
-from .globo import links
+from .globo_scraper import links
 
 
 def start(n):

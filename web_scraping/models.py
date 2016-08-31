@@ -12,10 +12,10 @@ class Comment(models.Model):
     news = models.ForeignKey('News')
 
     def __str__(self):
-        return self.author
+        return self.text
 
     def __unicode__(self):
-        return self.author
+        return self.text
 
 
 class Domain(models.Model):
