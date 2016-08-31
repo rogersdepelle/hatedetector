@@ -31,9 +31,6 @@ class Domain(models.Model):
     def __str__(self):
         return self.name
 
-    def __unicode__(self):
-        return self.name
-
 
 class News(models.Model):
 
@@ -48,7 +45,4 @@ class News(models.Model):
     domain = models.ForeignKey('Domain')
 
     def __str__(self):
-        return self.title
-
-    def __unicode__(self):
         return self.title

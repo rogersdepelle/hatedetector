@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 
 import json
 import requests
@@ -38,6 +38,8 @@ def get_text(tree, path):
     """
     ToDo
     """
+    for a in tree.xpath(path):
+        print(a.encode('utf-8').decode('utf-8'))
     return ''.join(tree.xpath(path)).strip()
 
 
@@ -45,12 +47,12 @@ def get_json(url):
     """
     ToDo
     """
-    response = requests_get(url).content[28:-1]
-    response = json.loads(response.decode('UTF-8'))
+    response = requests_get(url).text[28:-1]
+    response = json.loads(response)
     return response
 
 
-def g1_comments(script, news):
+def comments(script, news):
     """
     Builds the url ajax call that returns the comments in a json,
     save the comments in the database
@@ -91,9 +93,9 @@ def g1_comments(script, news):
     return True
 
 
-def g1_news(url, date, domain):
+def news(url, date, domain):
     """
-    Perform a request in news url, calls g1 to collect comments
+    Perform a request in news url, calls comments() to collect comments
     and extract the title, text and date of news.
     :param url: news link
     :return Boolean: True if the news is valid and false if not 
@@ -102,7 +104,7 @@ def g1_news(url, date, domain):
         return False
 
     paths = ["//*[@id='glb-materia']", "//*[contains(@class, 'corpo-blog')]", "//*[contains(@class, 'widget-comentarios')]"]
-    tree = html.fromstring(requests_get(url).content)
+    tree = html.fromstring(requests_get(url).text)
     
     for path in paths:
         script = tree.xpath(path + "/script/text()")
@@ -125,14 +127,14 @@ def g1_news(url, date, domain):
     else:
         return False
 
-    if not g1_comments(script, news):
+    if not comments(script, news):
         news.delete()
         return False
 
     return True
 
 
-def g1_links(amount, domain):
+def links(amount, domain):
     """
     Collecting the amount requested links of news domain
     :param amount: number of links
@@ -147,15 +149,9 @@ def g1_links(amount, domain):
         for item in items:
             date = item['publication'].split('T')[0]
             date = datetime.strptime(date, '%Y-%m-%d')
-            if g1_news(item['content']['url'], date, domain):
+            if news(item['content']['url'], date, domain):
                 n += 1
             if n == amount:
                 break
         next_page = int(response['nextPage'])
     return n
-
-from .models import Domain
-
-d = Domain.objects.all()
-for x in d:
-    g1_links(5, x)
