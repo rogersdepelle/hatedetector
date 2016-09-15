@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% load materializecss %}
+
+{% block nav %}
+  <span>Administração</span>
+  <span class="brand-logo right">
+    <a href="{% url 'annotation_logout' %}" title="Sair"><i class="material-icons right">exit_to_app</i></a>
+    <a href="{% url 'annotation' %}" title="Sair"><i class="material-icons right">comment</i></a>
+  </span>
+{% endblock nav %}
+
+{% block content %}
+  <div class="row">
+    <div class="col m12">
+      <h4><b>Anotadores</b></h4>
+    </div>
+    <form method="POST" class="col m8 s12">
+        {% csrf_token %}
+        {{form.rater|materializecss:'m7'}}
+        {{form.amount|materializecss:'m3'}}
+        <div class="input-field col m2 s2">
+          <input type="submit" value="ADD" class="btn">
+        </div>
+    </form>
+    <div class="col m2 s6 center">
+      <b>
+        Comentários<br>
+        300
+      </b>
+    </div>
+    <div class="col m2 s6 center">
+      <b>
+        Classificados<br>
+        200
+      </b>
+    </div>
+    <div class="col m12">
+      <table class="striped centered">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Classificações</th>
+            <th>Positivas</th>
+            <th>Negativas</th>
+            <th>Restantes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left">Rogers Prates de Pelle</td>
+            <td>300</td>
+            <td>105</td>
+            <td>130</td>
+            <td>65</td>
+          </tr>
+          <tr>
+            <td class="left">Rogers Prates de Pelle</td>
+            <td>300</td>
+            <td>105</td>
+            <td>130</td>
+            <td>65</td>
+          </tr>
+          <tr>
+            <td class="left">Rogers Prates de Pelle</td>
+            <td>300</td>
+            <td>105</td>
+            <td>130</td>
+            <td>65</td>
+          </tr>
+          <tr>
+            <td class="left">Rogers Prates de Pelle</td>
+            <td>300</td>
+            <td>105</td>
+            <td>130</td>
+            <td>65</td>
+          </tr>
+          <tr>
+            <td class="left">Rogers Prates de Pelle</td>
+            <td>300</td>
+            <td>105</td>
+            <td>130</td>
+            <td>65</td>
+          </tr>
+          <tr>
+            <td class="left">Rogers Prates de Pelle</td>
+            <td>300</td>
+            <td>105</td>
+            <td>130</td>
+            <td>65</td>
+          </tr>
+          <tr>
+            <th class="center">6</th>
+            <th class="center">1800</th>
+            <th class="center">630</th>
+            <th class="center">780</th>
+            <th class="center">390</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content %}

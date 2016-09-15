@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-bt">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Hate Speech Annotation">
+  <meta name="keywords" content="Hate Speech,Cyberbullying">
+  <meta name="author" content="@rogersdepelle">
+  
+  <title>Cassificação de Comentários</title>
+
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+</head>
+
+<body>
+
+  <main>
+    
+    <nav class="teal" role="navigation">
+      <div class="nav-wrapper container">
+        {% block nav %}
+        {% endblock nav %}
+      </div>
+    </nav>
+
+    <div class="container">
+      {% block content %}
+      {% endblock content %}
+    </div>
+
+  </main>
+
+  <footer class="page-footer teal">
+    <div class="footer-copyright">
+      <div class="container center">
+        <a href="http://www.inf.ufrgs.br/~rppelle/" target="_blank">Rogers de Pelle</a>
+        | <a href="http://www.inf.ufrgs.br/ppgc/" target="_blank">PPGC</a>
+        | <a href="http://www.inf.ufrgs.br/site/" target="_blank">INF</a>
+        | <a href="http://www.ufrgs.br/ufrgs/inicial" target="_blank">UFRGS</a>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      font-size: 14pt;
+    }
+
+    main {
+      flex: 1 0 auto;
+    }
+
+    .nav-wrapper span{
+      font-size: 18pt;
+    }
+
+    .select-wrapper{
+      margin-top: 15px;
+    }
+
+    label{
+      color: black;
+    }
+
+    footer a{
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      $('.modal-trigger').leanModal();
+      $('select').material_select();
+    });
+  </script>
+
+</body>
+</html>

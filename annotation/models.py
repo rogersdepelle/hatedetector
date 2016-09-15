@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from django.db import models
+from django.contrib.auth.models import User
 
 from web_scraping.models import Comment
 
@@ -11,8 +12,9 @@ class Annotation(models.Model):
         verbose_name = "Annotation"
         verbose_name_plural = "Annotations"
 
+    user = models.ForeignKey(User, verbose_name='Anotador')
     comment = models.ForeignKey(Comment)
-    is_hate_speech = models.BooleanField(help_text='Este comentários representa um dicursso de ódio?')
+    is_hate_speech = models.NullBooleanField(default=None)
     kind = models.ManyToManyField('KindOfOffence')
 
     def kinds(self):

@@ -10,11 +10,9 @@ class Comment(models.Model):
     author = models.CharField(max_length=45)
     text = models.TextField()
     news = models.ForeignKey('News')
+    valid = models.NullBooleanField()
 
     def __str__(self):
-        return self.text
-
-    def __unicode__(self):
         return self.text
 
 

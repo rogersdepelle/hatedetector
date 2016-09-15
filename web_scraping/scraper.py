@@ -38,18 +38,17 @@ def get_text(tree, path):
     """
     ToDo
     """
-    for a in tree.xpath(path):
-        print(a.encode('utf-8').decode('utf-8'))
-    return ''.join(tree.xpath(path)).strip()
+    return ''.join(tree.xpath(path))
 
 
 def get_json(url):
     """
     ToDo
     """
-    response = requests_get(url).text[28:-1]
-    response = json.loads(response)
-    return response
+    try:
+        return json.loads(requests_get(url).text[28:-1])
+    except:
+        return []
 
 
 def comments(script, news):
@@ -89,8 +88,9 @@ def comments(script, news):
 
             for reply in replies:
                 Comment.objects.create(author=reply['Usuario']['nome'], text=reply['texto'], news=news)
-
-    return True
+    if Comment.objects.filter(news=news).count() > 0:
+        return True
+    return False
 
 
 def news(url, date, domain):
@@ -151,6 +151,7 @@ def links(amount, domain):
             date = datetime.strptime(date, '%Y-%m-%d')
             if news(item['content']['url'], date, domain):
                 n += 1
+                print(n)
             if n == amount:
                 break
         next_page = int(response['nextPage'])
