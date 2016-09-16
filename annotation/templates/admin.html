@@ -6,7 +6,7 @@
   <span>Administração</span>
   <span class="brand-logo right">
     <a href="{% url 'annotation_logout' %}" title="Sair"><i class="material-icons right">exit_to_app</i></a>
-    <a href="{% url 'annotation' %}" title="Sair"><i class="material-icons right">comment</i></a>
+    <a href="{% url 'annotation' %}" title="Comentários"><i class="material-icons right">comment</i></a>
   </span>
 {% endblock nav %}
 
@@ -22,17 +22,22 @@
         <div class="input-field col m2 s2">
           <input type="submit" value="ADD" class="btn">
         </div>
+        {% if msg %}
+          <div class="col s12 red-text">
+            {{ msg }}
+          </div>
+        {% endif %}
     </form>
     <div class="col m2 s6 center">
       <b>
-        Comentários<br>
-        300
+        Total: {{ n_comments }}<br>
+        Válidos: {{ n_valid_comments }}
       </b>
     </div>
     <div class="col m2 s6 center">
       <b>
-        Classificados<br>
-        200
+        Anotados: 200<br>
+        Restantes: 200
       </b>
     </div>
     <div class="col m12">
@@ -47,48 +52,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="left">Rogers Prates de Pelle</td>
-            <td>300</td>
-            <td>105</td>
-            <td>130</td>
-            <td>65</td>
-          </tr>
-          <tr>
-            <td class="left">Rogers Prates de Pelle</td>
-            <td>300</td>
-            <td>105</td>
-            <td>130</td>
-            <td>65</td>
-          </tr>
-          <tr>
-            <td class="left">Rogers Prates de Pelle</td>
-            <td>300</td>
-            <td>105</td>
-            <td>130</td>
-            <td>65</td>
-          </tr>
-          <tr>
-            <td class="left">Rogers Prates de Pelle</td>
-            <td>300</td>
-            <td>105</td>
-            <td>130</td>
-            <td>65</td>
-          </tr>
-          <tr>
-            <td class="left">Rogers Prates de Pelle</td>
-            <td>300</td>
-            <td>105</td>
-            <td>130</td>
-            <td>65</td>
-          </tr>
-          <tr>
-            <td class="left">Rogers Prates de Pelle</td>
-            <td>300</td>
-            <td>105</td>
-            <td>130</td>
-            <td>65</td>
-          </tr>
+          {% for item in table %}
+            <tr>
+              <td class="left">{{ item.user }}</td>
+              <td>{{ item.classifications }}</td>
+              <td>{{ item.positive }}</td>
+              <td>{{ item.negative }}</td>
+              <td>{{ item.remaining }}</td>
+            </tr>
+          {% endfor %}
           <tr>
             <th class="center">6</th>
             <th class="center">1800</th>

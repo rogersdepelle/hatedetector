@@ -9,6 +9,7 @@ from .models import Annotation
 
 
 class AddAnnotationForm(forms.Form):
+    User.__str__ = User.get_full_name
     rater = forms.ModelChoiceField(queryset=User.objects.all(), empty_label="Selecione Anotador.", label='')
     amount = forms.IntegerField(min_value=1, label='Quantidade')
 

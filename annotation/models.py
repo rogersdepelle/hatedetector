@@ -14,8 +14,8 @@ class Annotation(models.Model):
 
     user = models.ForeignKey(User, verbose_name='Anotador')
     comment = models.ForeignKey(Comment)
-    is_hate_speech = models.NullBooleanField(default=None)
-    kind = models.ManyToManyField('KindOfOffence')
+    is_hate_speech = models.NullBooleanField()
+    kind = models.ManyToManyField('KindOfOffence', blank=True)
 
     def kinds(self):
         kinds = ""
