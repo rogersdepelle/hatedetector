@@ -2,6 +2,16 @@
 
 {% load materializecss %}
 
+{% block tab_title %}
+  {{ system.name }} | Dashboard
+{% endblock tab_title %}
+
+{% block nav %}
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard">
+      <a href="{% url 'dashboard' %}"><i class="material-icons">home</i></i></a>
+    </li>
+{% endblock nav %}
+
 {% block content %}
   <div class="row">
     <div class="col m12">

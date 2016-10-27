@@ -1,14 +1,13 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
+
+{% block tab_title %}
+  {{ system.name }} | Annotation
+{% endblock tab_title %}
 
 {% block nav %}
-  <span>Cassificação de Comentários</span>
-  <span class="brand-logo right">
-    <a href="#" title="Sair"><i class="material-icons right">exit_to_app</i></a>
-    {% if request.user.is_superuser %}
-      <a href="{% url 'annotation_admin' %}" title="Admin"><i class="material-icons right">lock</i></a>
-    {% endif %}
-    1/50
-  </span>
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard">
+      <a href="{% url 'dashboard' %}"><i class="material-icons">home</i></i></a>
+    </li>
 {% endblock nav %}
 
 {% block content %}

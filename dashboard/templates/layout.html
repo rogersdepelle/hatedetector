@@ -16,17 +16,13 @@
       <a href="#" data-activates="mobile_nav" class="button-collapse"><i class="material-icons">menu</i></a>
 
       <ul class="right hide-on-med-and-down" id="comp_nav">
-        {% for item in menu %}
-          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{ item.label }}">
-            <a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i></i></a>
-          </li>
-        {% endfor %}
+        {% block nav %}
+        {% endblock nav %}
       </ul>
 
       <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">
-        {% for item in menu %}
-          <li><a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i>&nbsp; {{ item.label }}</a></li>
-        {% endfor %}
+        {% block nav %}
+        {% endblock nav %}
       </ul>
 
     </div>

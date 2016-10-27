@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 from web_scraping.models import Comment
+from dashboard.utils import set_context
 
 from .models import Annotation
 from .forms import AddAnnotationForm
@@ -14,13 +15,13 @@ from .forms import AddAnnotationForm
 
 @login_required(redirect_field_name=None)
 def annotation(request):
-    context = {}
+    context = set_context(request)
     return render(request, "annotation.html", context)
 
 
 @staff_member_required
-def annotation_admin(request):
-    context = {}
+def dashboard(request):
+    context = set_context(request)
     table = []
     total = {}
     comments = Comment.objects.all()
@@ -40,7 +41,7 @@ def annotation_admin(request):
     total['classifications'] = annotations.count()
     total['positive'] = annotations.filter(is_hate_speech=True).count()
     total['negative'] = annotations.filter(is_hate_speech=False).count()
-    total['negremainingative'] = annotations.filter(is_hate_speech=None).count()
+    total['x'] = annotations.filter(is_hate_speech=None).count()
 
     if request.POST:
         form = AddAnnotationForm(request.POST)
@@ -58,13 +59,3 @@ def annotation_admin(request):
     context['table'] = table
 
     return render(request, "admin.html", context)
-
-
-def annotation_login(request):
-    context = {}
-    return render(request, "login.html", context)
-
-
-def annotation_logout(request):
-    logout(request)
-    return redirect('annotation_login')
