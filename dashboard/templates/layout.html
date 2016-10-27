@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block layout %}
+
+  <nav class="{{ system.primary_color_class }}" id="main_nav">
+    <div class="nav-wrapper">
+
+      {% if system.brand %}
+        <a href="{% url 'dashboard' %}" class="brand-logo">
+          <img src="/media/{{ system.brand }}" id="brand" alt="{{ system.name }}">
+        </a>
+      {% else %}
+        <a href="{% url 'dashboard' %}" class="brand-logo">{{ system.name }}</a>
+      {% endif %}
+
+      <a href="#" data-activates="mobile_nav" class="button-collapse"><i class="material-icons">menu</i></a>
+
+      <ul class="right hide-on-med-and-down" id="comp_nav">
+        {% for item in menu %}
+          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{ item.label }}">
+            <a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i></i></a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">
+        {% for item in menu %}
+          <li><a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i>&nbsp; {{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer class="page-footer grey lighten-2">
+    <div class="footer-copyright">
+      <div class="container center">
+        <a href="{{ system.site_author }}" class="black-text" target="_blank">
+          {% now "Y" as current_year %}
+          <span class="hide-on-small-only">© {{ current_year }} {{ system.author }}</span>
+          <span class="hide-on-med-and-up">© {{ current_year }} {{ system.acronym_author }}</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+{% endblock layout %}

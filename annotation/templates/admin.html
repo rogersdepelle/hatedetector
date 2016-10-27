@@ -2,14 +2,6 @@
 
 {% load materializecss %}
 
-{% block nav %}
-  <span>Administração</span>
-  <span class="brand-logo right">
-    <a href="{% url 'annotation_logout' %}" title="Sair"><i class="material-icons right">exit_to_app</i></a>
-    <a href="{% url 'annotation' %}" title="Comentários"><i class="material-icons right">comment</i></a>
-  </span>
-{% endblock nav %}
-
 {% block content %}
   <div class="row">
     <div class="col m12">
@@ -28,16 +20,10 @@
           </div>
         {% endif %}
     </form>
-    <div class="col m2 s6 center">
+    <div class="col m2 offset-m2 s6 center">
       <b>
         Total: {{ n_comments }}<br>
         Válidos: {{ n_valid_comments }}
-      </b>
-    </div>
-    <div class="col m2 s6 center">
-      <b>
-        Anotados: 200<br>
-        Restantes: 200
       </b>
     </div>
     <div class="col m12">
@@ -61,13 +47,6 @@
               <td>{{ item.remaining }}</td>
             </tr>
           {% endfor %}
-          <tr>
-            <th class="center">6</th>
-            <th class="center">1800</th>
-            <th class="center">630</th>
-            <th class="center">780</th>
-            <th class="center">390</th>
-          </tr>
         </tbody>
       </table>
     </div>
