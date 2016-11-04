@@ -24,4 +24,10 @@ def set_context(request):
         context['notifications'] = []
     request.session['notifications'] = []
 
+    if request.session['intro']:
+        context['intro'] = True
+        request.session['intro'] = False
+    else:
+        context['intro'] = False
+
     return context

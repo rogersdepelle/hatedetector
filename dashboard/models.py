@@ -38,4 +38,3 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return self.label
-    

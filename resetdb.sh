@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Dump Initial data: ./manage.py dumpdata auth sites robots dashboard > project/fixtures/initial_data.json
+#Dump Initial data: ./manage.py dumpdata auth sites robots dashboard annotation.kindofoffence web_scraping.domain > project/fixtures/initial_data.json
 #Backup: ./manage.py dumpdata > project/fixtures/initial_data.json
 
 source venv/bin/activate

@@ -27,7 +27,7 @@
             </div>
             <div class="col s12 center">
               <br>
-              <a class="modal-trigger" href="#recover_password">{% trans "Recover Password" %}</a>
+              <a class="modal-trigger" href="#recover_password">{% trans "Recuperar Senha" %}</a>
             </div>
           </div>
         </form>
@@ -38,9 +38,9 @@
       {% csrf_token %}
       <div id="recover_password" class="modal">
         <div class="modal-content">
-          <h3>{% trans "Recover Password" %}</h3>
+          <h3>{% trans "Recuperar Senha" %}</h3>
           <p>
-            {% trans "Enter the email you use to access the system, we'll send a new password, which will be able to be changed in the next access." %}
+            {% trans "Insira seu email de acesso ao sistema, será enviado uma nova senha em seu email, que poderá ser substituída no próximo acesso." %}
           </p>
           {{ recover_password_form.email_recover|materializecss }}
           <input type="hidden" name="form" value="recover_password">

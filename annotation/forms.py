@@ -10,7 +10,7 @@ from .models import Annotation
 
 class AddAnnotationForm(forms.Form):
     User.__str__ = User.get_full_name
-    rater = forms.ModelChoiceField(queryset=User.objects.all(), empty_label="Selecione Anotador.", label='')
+    rater = forms.ModelChoiceField(queryset=User.objects.filter(is_superuser=False), empty_label="Selecione Anotador.", label='')
     amount = forms.IntegerField(min_value=1, label='Quantidade')
 
     def save(self):
@@ -25,7 +25,10 @@ class AddAnnotationForm(forms.Form):
                 comments.append(comment)
             if len(comments) == amount:
                 break
-        
+
+        if len(comments) < amount:
+            return 0
+
         for comment in comments:
             Annotation.objects.create(user=rater, comment=comment)
 
@@ -33,7 +36,13 @@ class AddAnnotationForm(forms.Form):
 
 
 class AnnotationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AnnotationForm, self).__init__(*args, **kwargs)
+        self.fields['kind'].label = ''
+        self.fields['is_hate_speech'] = forms.TypedChoiceField( coerce=lambda x: x == 'True', choices=((True, 'Sim'), (False, 'Não')), widget=forms.RadioSelect)
+        self.fields['is_hate_speech'].label = ''
+
+
     class Meta:
-        model = Annotation  
+        model = Annotation
         fields = ('is_hate_speech', 'kind')
-    

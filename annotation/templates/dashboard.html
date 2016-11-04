@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 
 {% load materializecss %}
 
@@ -7,15 +7,18 @@
 {% endblock tab_title %}
 
 {% block nav %}
-    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard">
-      <a href="{% url 'dashboard' %}"><i class="material-icons">home</i></i></a>
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Classificação">
+      <a href="{% url 'admin:index' %}"><i class="material-icons">lock</i></i></a>
+    </li>
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Classificação">
+      <a href="{% url 'annotation' %}"><i class="material-icons">comment</i></i></a>
     </li>
 {% endblock nav %}
 
 {% block content %}
   <div class="row">
     <div class="col m12">
-      <h4><b>Anotadores</b></h4>
+      <h5>Dashboard</h5>
     </div>
     <form method="POST" class="col m8 s12">
         {% csrf_token %}
@@ -30,11 +33,9 @@
           </div>
         {% endif %}
     </form>
-    <div class="col m2 offset-m2 s6 center">
-      <b>
-        Total: {{ n_comments }}<br>
-        Válidos: {{ n_valid_comments }}
-      </b>
+    <div class="col m3 offset-m1 s6">
+        Comentários Coletados: <b>{{ n_comments }}</b>
+        <p>Comentários Válidos: <b>{{ n_valid_comments }}</b></p>
     </div>
     <div class="col m12">
       <table class="striped centered">
@@ -57,6 +58,13 @@
               <td>{{ item.remaining }}</td>
             </tr>
           {% endfor %}
+          <tr>
+            <td><b>{{ total.users }}</b></td>
+            <td><b>{{ total.classifications }}</b></td>
+            <td><b>{{ total.positive }}</b></td>
+            <td><b>{{ total.negative }}</b></td>
+            <td><b>{{ total.remaining }}</b></td>
+          </tr>
         </tbody>
       </table>
     </div>

@@ -37,4 +37,4 @@ class KindOfOffence(models.Model):
     definition = models.TextField()
 
     def __str__(self):
-        return self.name 
+        return self.name

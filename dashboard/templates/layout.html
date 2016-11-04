@@ -4,27 +4,17 @@
 
   <nav class="{{ system.primary_color_class }}" id="main_nav">
     <div class="nav-wrapper">
-
-      {% if system.brand %}
-        <a href="{% url 'dashboard' %}" class="brand-logo">
-          <img src="/media/{{ system.brand }}" id="brand" alt="{{ system.name }}">
-        </a>
-      {% else %}
-        <a href="{% url 'dashboard' %}" class="brand-logo">{{ system.name }}</a>
-      {% endif %}
-
-      <a href="#" data-activates="mobile_nav" class="button-collapse"><i class="material-icons">menu</i></a>
-
-      <ul class="right hide-on-med-and-down" id="comp_nav">
+      <a href="#" class="brand-logo">{{ system.name }}</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
         {% block nav %}
         {% endblock nav %}
+        <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dados de Acesso">
+          <a href="{% url 'profile' %}"><i class="material-icons">account_box</i></a>
+        </li>
+        <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Sair">
+          <a href="{% url 'logout' %}"><i class="material-icons">exit_to_app</i></i></a>
+        </li>
       </ul>
-
-      <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">
-        {% block nav %}
-        {% endblock nav %}
-      </ul>
-
     </div>
   </nav>
 

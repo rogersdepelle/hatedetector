@@ -8,6 +8,7 @@ from .utils import set_context
 
 
 def login(request):
+    request.session['intro'] = True
     context = set_context(request)
     login_form = LoginForm()
     recover_password_form = RecoverPasswordForm()
@@ -17,7 +18,8 @@ def login(request):
             login_form = LoginForm(request.POST)
             if login_form.is_valid():
                 request = login_form.save(request=request)
-                return redirect('dashboard')
+                request.session['intro'] = True
+                return redirect('annotation')
         if request.POST['form'] == 'recover_password':
             recover_password_form = RecoverPasswordForm(request.POST)
             if recover_password_form.is_valid():
@@ -45,13 +47,13 @@ def profile(request):
             user_form = UserForm(request.POST, instance=request.user)
             if user_form.is_valid():
                 user_form.save()
-                context['notifications'].append(_('Profile updated successfully'))
+                context['notifications'].append(_('Perfil atualizado com sucesso.'))
         if request.POST['form'] == 'password':
             password_form = PasswordForm(request.user, request.POST )
             username = request.user.username
             if password_form.is_valid():
                 request = password_form.save(username=username, request=request)
-                context['notifications'].append(_('Password updated successfully'))
+                context['notifications'].append(_('Senha atualizada com sucesso.'))
 
     context['password_form'] = password_form
     context['user_form'] = user_form

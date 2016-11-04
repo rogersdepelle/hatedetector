@@ -14,18 +14,18 @@ class LoginForm(forms.Form):
 
     def clean_password(self):
         try:
-            username = User.objects.get(email=self.cleaned_data['email'])
+            user = User.objects.get(email=self.cleaned_data['email'])
             password = self.cleaned_data['password']
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=user.username, password=password)
             if user is not None:
                 if user.is_active:
                     return password
                 else:
-                    raise ValidationError(_("Your system access has been temporarily disabled"))
+                    raise ValidationError(_("Seu acesso esta temporariamente desabilitado, entre em contato com o adminstrador do sistema."))
             else:
-                raise ValidationError(_("Email and/or password are invalid"))
+                raise ValidationError(_("Email e/ou senha inválidos!"))
         except:
-            raise ValidationError(_("Email and/or password are invalid"))
+            raise ValidationError(_("Email e/ou senha inválidos!"))
 
     def save(self, request):
         user = User.objects.get(email=self.cleaned_data['email'])
@@ -58,16 +58,16 @@ class RecoverPasswordForm(forms.Form):
             try:
                 if 1 == send_mail("Password Recovery", message, settings.EMAIL_HOST_USER, [self.cleaned_data['email_recover']], fail_silently=False):
                     user.save()
-                    return _("It sent an email with a new password.")
+                    return _("Foi enviado uma nova senha de acesso por email, que poderá ser alterada no próximo acesso.")
                 else:
                     return error_message
             except:
                 return error_message
         except:
-            return _("Invalid email.")
+            return _("Email inválido.")
 
 
- 
+
 class UserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)

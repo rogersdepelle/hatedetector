@@ -1,12 +1,17 @@
 {% extends "layout.html" %}
 
+{% load materializecss %}
+
 {% block tab_title %}
-  {{ system.name }} | Annotation
+  {{ system.name }} | Classificação
 {% endblock tab_title %}
 
 {% block nav %}
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard" id="count">
+      {{annotation_i}}/{{annotation_n}}
+    </li>
     <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard">
-      <a href="{% url 'dashboard' %}"><i class="material-icons">home</i></i></a>
+      <a href="{% url 'dashboard' %}"><i class="material-icons">insert_chart</i></a>
     </li>
 {% endblock nav %}
 
@@ -15,82 +20,43 @@
     <div class="col m12">
       <p>
         <b>O comentário abaixo foi escrito em um site de notícias:</b>
-        <a href="#" class="right" target="_blank">Clique aqui para ver a notícia</a>
+        <a href="{{ annotation.comment.news.url }}" class="right" target="_blank">Clique aqui para ver a notícia</a>
       </p>
-      <i>"Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis. Diuretics paradis num copo é motivis de denguis. Praesent malesuada urna nisi, quis volutpat erat hendrerit non. Nam vulputate dapibus."</i>
+      <i>"{{ annotation.comment.text }}"</i>
     </div>
   </div>
   <form method="POST" class="row">
-    <div class="col m12">
       {% csrf_token %}
-      <b id="quest">Você classifica este comentário como ofensivo?</b>
-      <input name="group1" type="radio" id="test1" />
-      <label for="test1">Sim</label>
-      <input name="group1" type="radio" id="test2" />
-      <label for="test2">Não</label>
-      <p>
-        <b>Caso afirmativo, a ofensa pode ser classificada como:</b>
-        <br>(pode escolher quantas classes quiser)
-      </p>
-    </div>
-    <div class="col m4 s12">
-      <p>
-        <input type="checkbox" class="filled-in" id="filled-in-box1"/>
-        <label for="filled-in-box1">Racismo</label>
-      </p>
-      <p>
-        <input type="checkbox" class="filled-in" id="filled-in-box2"/>
-        <label for="filled-in-box2">Sexismo</label>
-      </p>
-      <p>
-        <input type="checkbox" class="filled-in" id="filled-in-box3"/>
-        <label for="filled-in-box3">Homofobia</label>
-      </p>
-    </div>
-    <div class="col m4 s12">
-      <p>
-        <input type="checkbox" class="filled-in" id="filled-in-box4"/>
-        <label for="filled-in-box4">Xenofobia</label>
-      </p>
-      <p>
-        <input type="checkbox" class="filled-in" id="filled-in-box5"/>
-        <label for="filled-in-box5">Intolerância religiosa</label>
-      </p>
-      <p>
-        <input type="checkbox" class="filled-in" id="filled-in-box6"/>
-        <label for="filled-in-box6">Xingamentos</label>
-      </p>
-    </div>
-    <div class="col m4 s12">
-      <p>
-        <input type="checkbox" class="filled-in" id="filled-in-box7"/>
-        <label for="filled-in-box7">Xingamentos</label>
-      </p>
-      <div class="input-field">
-        <input id="first_name" type="text" class="validate">
-        <label for="first_name">Outro</label>
-        Ao clicar em próximo as alterações serão salvas automáticamente.
+      <div class="col s12">
+        <b>Você classifica este comentário como ofensivo?</b>
       </div>
-    </div>
+      {{form.is_hate_speech|materializecss:'s12'}}
+      <div class="col s12">
+        <br><b>Caso afirmativo, a ofensa pode ser classificada como:</b>
+        <br>(pode escolher quantas classes quiser)
+      </div>
+      {{form.kind|materializecss:'s12'}}
+      <div class="col m6 s12">
+        <br><a class="modal-trigger" href="#instrucoes">Instruções</a><br>
+        <a class="modal-trigger" href="#classes">Definições das Classes</a>
+      </div>
+      <div class="col m6 s12">
+        <br><input type="submit" class="{{ system.primary_color_hex }} btn right" value="Próximo">
+        <input type="submit" value="Submit">
+      </div>
   </form>
-  <div class="row" id="nav">
-    <div class="col m6 s12">
-      <a class="modal-trigger" href="#instrucoes">Instruções</a><br>
-      <a class="modal-trigger" href="#classes">Definições das classes</a>
-    </div>
-    <div class="col m6 s12">
-      <a class="btn blue right" href="#" id="next"><i class="material-icons right">keyboard_arrow_right</i>Próximo</a>
-      <a class="btn blue right" href="#"><i class="material-icons left">keyboard_arrow_left</i>Anterior</a>
-    </div>
-  </div>
   <div id="instrucoes" class="modal">
     <div class="modal-content">
       <h5>Instruções</h5>
-      <p>
-        Prezado(a) Nome Completo do Usuário, você irá nos ajudar a treinar um sistema de reconhecimento de comentários​ ofensivos.​<br><br>
-        Comentários ofensivos atacam, ameaçam ou insultam uma pessoa ou grupo de pessoas por sua origem, etnia, raça, religião, gênero, orientação sexual, deficiência, etc. Nosso objetivo é reconhecê-los de forma automática e não permitir que eles sejam divulgados na Internet.<br><br>
-        Iremos apresentar 100 comentários coletados de sites de notícias brasileiros. Sua tarefa é julgar se cada comentário pode ser considerado ofensivo, em outras palavras, se o comentário pode causar constrangimento a uma pessoa ou grupo de pessoas. Caso afirmativo, pedimos também que classifique o tipo de ofensa encontrada.​
-  ​      </p>
+        <p>
+          Prezado(a) Nome Completo do Usuário, você irá nos ajudar a treinar um sistema de reconhecimento de comentários​ ofensivos.​
+        </p>
+        <p>
+          Comentários ofensivos atacam, ameaçam ou insultam uma pessoa ou grupo de pessoas por sua origem, etnia, raça, religião, gênero, orientação sexual, deficiência, etc. Nosso objetivo é reconhecê-los de forma automática e não permitir que eles sejam divulgados na Internet.
+        </p>
+        <p>
+          Iremos apresentar {{annotation_n}} comentários coletados de sites de notícias brasileiros. Sua tarefa é julgar se cada comentário pode ser considerado ofensivo, em outras palavras, se o comentário pode causar constrangimento a uma pessoa ou grupo de pessoas. Caso afirmativo, pedimos também que classifique o tipo de ofensa encontrada.​
+        </p>
     </div>
     <div class="modal-footer">
       <a href="#!" class=" modal-action modal-close btn-flat">Fechar</a>
@@ -100,32 +66,21 @@
   <div id="classes" class="modal modal-fixed-footer">
     <div class="modal-content">
       <h5>Definições das classes</h5>
-      <b>Racismo: </b>Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis.<br><br>
-      <b>Racismo: </b>Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis.<br><br>
-      <b>Racismo: </b>Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis.<br><br>
-      <b>Racismo: </b>Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis.<br><br>
-      <b>Racismo: </b>Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis.<br><br>
-      <b>Racismo: </b>Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis.<br><br>
-      <b>Racismo: </b>Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis.<br><br>
-      <b>Racismo: </b>Mussum Ipsum, cacilds vidis litro abertis. Delegadis gente finis, bibendum egestas augue arcu ut est. Pra lá , depois divoltis porris, paradis.
+      {% for type in types %}
+        <p><b>{{ type.name}}: </b>{{ type.definition }}</p>
+      {% endfor %}
     </div>
     <div class="modal-footer">
       <a href="#!" class=" modal-action modal-close btn-flat">Fechar</a>
     </div>
   </div>
 
-  <style>
-    #quest{
-      margin-right: 30px;
-    }
-
-    #nav{
-      padding-top: 50px;
-    }
-
-    #next{
-      margin-left: 20px;
-    }
-  </style>
+  {% block script %}
+    {% if intro %}
+      <script>
+        $('#instrucoes').openModal();
+      </script>
+    {% endif %}
+  {% endblock script %}
 
 {% endblock content %}

@@ -1,7 +1,7 @@
 /* All */
 
 *{
-    font-size: 13pt;
+    font-size: 14pt;
 }
 
 body {
@@ -17,6 +17,35 @@ main {
 
 .modal-trigger, .delete_item{
     cursor: pointer;
+}
+
+label{
+    color: black;
+}
+
+/* Annotation*/
+
+#count{
+    font-size: 18pt;
+    font-weight: bold;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.select-wrapper{
+    padding-top: 15px;
+}
+
+#quest{
+  margin-right: 30px;
+}
+
+#nav{
+  padding-top: 50px;
+}
+
+#next{
+  margin-left: 20px;
 }
 
 /* Main Nav*/
@@ -93,7 +122,7 @@ main {
 }
 
 .checkbox-field label{
-    color: #000 !important;
+    color: #F00 !important;
 }
 [type="checkbox"]:checked+label:before{
     border-right-color: var(--primary);
@@ -103,4 +132,13 @@ main {
 .dropdown-content li>a, .dropdown-content li>span{
     color: var(--primary);
     font-weight: bold;
+}
+
+[type="checkbox"]+label{
+    padding-left: 25px !important;
+}
+
+[type="radio"]+label{
+    padding-left: 25px !important;
+    padding-right: 20px;
 }

@@ -15,5 +15,5 @@ DATABASES = {
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'noreply@project.com'
-EMAIL_HOST_PASSWORD = 'project_password'
+EMAIL_HOST_USER = 'noreply@swrdev.com.br'
+EMAIL_HOST_PASSWORD = '@swrdev*'
