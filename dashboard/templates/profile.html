@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block tab_title %}
+  {{ system.name }} | {% trans "Profile" %}
+{% endblock tab_title %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col l5 m6 s12">
+      <div class="row">
+        <div class="col 12">
+          <h4>{% trans "Profile" %}</h4>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {{ user_form.first_name|materializecss }}
+            {{ user_form.last_name|materializecss }}
+            {{ user_form.email|materializecss }}
+            <input type="hidden" name="form" value="profile">
+            <div class="col 12 right">
+              <br>
+              <a href="{% url 'annotation' %}" class="btn {{ system.secondary_color_class }}">{% trans "Cancel" %}</a>
+            <input type="submit" class="btn {{ system.primary_color_class }}" value="{% trans 'Save' %}">
+            </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col l5 offset-l1 m6 s12">
+      <div class="row">
+        <div class="col 12">
+          <h4>{% trans "Password" %}</h4>
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          {{ password_form.old_password|materializecss }}
+          {{ password_form.new_password1|materializecss }}
+          {{ password_form.new_password2|materializecss }}
+          <input type="hidden" name="form" value="password">
+          <div class="col 12 right">
+            <br>
+            <a href="{% url 'annotation' %}" class="btn {{ system.secondary_color_class }}">{% trans "Cancel" %}</a>
+            <input type="submit" class="btn {{ system.primary_color_class }}" value="{% trans 'Change' %}">
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}
