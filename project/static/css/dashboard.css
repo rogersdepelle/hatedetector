@@ -12,7 +12,7 @@ body {
 
 main {
     flex: 1 0 auto;
-    padding: 10px 5%;
+    padding: 10px 5% 0px 5%;
 }
 
 .modal-trigger, .delete_item{

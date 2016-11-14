@@ -7,7 +7,7 @@
 {% endblock tab_title %}
 
 {% block nav %}
-    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard" id="count">
+    <li id="count">
       {{annotation_i}}/{{annotation_n}}
     </li>
     <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard">
@@ -27,29 +27,27 @@
   </div>
   <form method="POST" class="row">
       {% csrf_token %}
-      <div class="col s12">
+      <div class="col m6 s12">
         <b>Você classifica este comentário como ofensivo?</b>
+        {{form.is_hate_speech|materializecss:'s12'}}
       </div>
-      {{form.is_hate_speech|materializecss:'s12'}}
-      <div class="col s12">
-        <br><b>Caso afirmativo, a ofensa pode ser classificada como:</b>
+      <div class="col m6 s12">
+        <b>Caso afirmativo, a ofensa pode ser classificada como:</b>
         <br>(pode escolher quantas classes quiser)
+        {{form.kind|materializecss:'s12'}}
+        {{form.other|materializecss:'s6'}}
       </div>
-      {{form.kind|materializecss:'s12'}}
-      <div class="col m6 s12">
-        <br><a class="modal-trigger" href="#instrucoes">Instruções</a><br>
+      <div class="col s12">
+        <a class="modal-trigger" href="#instrucoes">Instruções</a><br>
         <a class="modal-trigger" href="#classes">Definições das Classes</a>
-      </div>
-      <div class="col m6 s12">
-        <br><input type="submit" class="{{ system.primary_color_hex }} btn right" value="Próximo">
-        <input type="submit" value="Submit">
+        <input type="submit" class="{{ system.primary_color_hex }} btn right" value="Próximo">
       </div>
   </form>
   <div id="instrucoes" class="modal">
     <div class="modal-content">
       <h5>Instruções</h5>
         <p>
-          Prezado(a) Nome Completo do Usuário, você irá nos ajudar a treinar um sistema de reconhecimento de comentários​ ofensivos.​
+          Prezado(a) {{ request.user.get_full_name }}, você irá nos ajudar a treinar um sistema de reconhecimento de comentários​ ofensivos.​
         </p>
         <p>
           Comentários ofensivos atacam, ameaçam ou insultam uma pessoa ou grupo de pessoas por sua origem, etnia, raça, religião, gênero, orientação sexual, deficiência, etc. Nosso objetivo é reconhecê-los de forma automática e não permitir que eles sejam divulgados na Internet.
