@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block layout %}
+
+  <nav class="{{ system.primary_color_class }}" id="main_nav">
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">{{ system.name }}</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        {% block nav %}
+        {% endblock nav %}
+        <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dados de Acesso">
+          <a href="{% url 'profile' %}"><i class="material-icons">account_box</i></a>
+        </li>
+        <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Sair">
+          <a href="{% url 'logout' %}"><i class="material-icons">exit_to_app</i></i></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer class="page-footer grey lighten-2">
+    <div class="footer-copyright">
+      <div class="container center">
+        <a href="{{ system.site_author }}" class="black-text" target="_blank">
+          {% now "Y" as current_year %}
+          <span class="hide-on-small-only">© {{ current_year }} {{ system.author }}</span>
+          <span class="hide-on-med-and-up">© {{ current_year }} {{ system.acronym_author }}</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+{% endblock layout %}

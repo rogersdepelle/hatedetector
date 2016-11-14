@@ -1,5 +1,5 @@
 # Hate Detector
-Detector Offensive Text in the Web
+Detector Offensive Text on the Web
 
 ### Apps
 * Web Scraping
@@ -10,6 +10,6 @@ Detector Offensive Text in the Web
 * API
 
 ### Technologies
-* Python 3.4.3
-* Django 1.10
-* PostgresSQL 9.4
+* Python
+* Django
+* PostgresSQL

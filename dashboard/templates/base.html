@@ -1,0 +1,59 @@
+{% load compress %}
+{% load i18n %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="{{ system.description }}">
+  <meta name="keywords" content="{{ system.keywords }}">
+  <meta name="author" content="{{ system.author }}">
+
+  <title>
+    {% block tab_title %}{{ system.name }}{% endblock tab_title %}
+  </title>
+
+  <style type="text/css">
+    :root {
+      --primary: {{ system.primary_color_hex }};
+      --secondary: {{ system.secondary_color_hex }};
+    }
+  </style>
+
+  {% compress css %}
+    <link rel="stylesheet" href="{% static 'css/materialize.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  {% endcompress %}
+
+  <link rel="shortcut icon" type="image/png" href="/media/{{ system.favicon }}"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body>
+  
+  {% block layout %}
+  {% endblock layout %}
+
+  {% compress js %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/materialize.min.js'%}"></script>
+    <script src="{% static 'js/init.js'%}"></script>
+  {% endcompress %}
+
+  {% block script %}
+  {% endblock script %}
+
+  <script>
+    {% for n in notifications %}
+      Materialize.toast('{{ n }}', {{ n.split|length }}*1000+1000, 'rounded');
+    {% endfor %}
+  </script>
+
+</body>
+
+</html>

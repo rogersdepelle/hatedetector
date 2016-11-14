@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% load materializecss %}
+
+{% block tab_title %}
+  {{ system.name }} | Dashboard
+{% endblock tab_title %}
+
+{% block nav %}
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Admin">
+      <a href="{% url 'admin:index' %}"><i class="material-icons">lock</i></i></a>
+    </li>
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Classificação">
+      <a href="{% url 'annotation' %}"><i class="material-icons">comment</i></i></a>
+    </li>
+{% endblock nav %}
+
+{% block content %}
+  <div class="row">
+    <div class="col m12">
+      <h5>Dashboard</h5>
+    </div>
+    <form method="POST" class="col m8 s12">
+        {% csrf_token %}
+        {{form.rater|materializecss:'m7'}}
+        {{form.amount|materializecss:'m3'}}
+        <div class="input-field col m2 s2">
+          <input type="submit" value="ADD" class="btn">
+        </div>
+        {% if msg %}
+          <div class="col s12 red-text">
+            {{ msg }}
+          </div>
+        {% endif %}
+    </form>
+    <div class="col m3 offset-m1 s6">
+        Comentários Coletados: <b>{{ n_comments }}</b>
+        <p>Comentários Válidos: <b>{{ n_valid_comments }}</b></p>
+    </div>
+    <div class="col m12">
+      <table class="striped centered">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Classificações</th>
+            <th>Positivas</th>
+            <th>Negativas</th>
+            <th>Restantes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in table %}
+            <tr>
+              <td class="left">{{ item.user }}</td>
+              <td>{{ item.classifications }}</td>
+              <td>{{ item.positive }}</td>
+              <td>{{ item.negative }}</td>
+              <td>{{ item.remaining }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td><b>{{ total.users }}</b></td>
+            <td><b>{{ total.classifications }}</b></td>
+            <td><b>{{ total.positive }}</b></td>
+            <td><b>{{ total.negative }}</b></td>
+            <td><b>{{ total.remaining }}</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content %}
