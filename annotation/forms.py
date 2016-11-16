@@ -43,6 +43,7 @@ class AnnotationForm(forms.ModelForm):
         self.fields['other'].label = 'Outro'
         self.fields['is_hate_speech'] = forms.TypedChoiceField( coerce=lambda x: x == 'True', choices=((True, 'Sim'), (False, 'Não')), widget=forms.RadioSelect)
         self.fields['is_hate_speech'].label = ''
+        self.fields['is_hate_speech'].required = True
 
     class Meta:
         model = Annotation

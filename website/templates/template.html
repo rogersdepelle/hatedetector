@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block layout %}
+
+  <header>
+    <div class="row">
+      <div class="col s12">
+        <h3>Hate Detector</h3>
+        Sistema de detecção de comentários ofensivos na Web.
+      </div>
+    </div>
+  </header>
+
+  <nav class="{{ system.primary_color_class }}" id="main_nav">
+    <div class="nav-wrapper" id="site-nav">
+      <a href="#" data-activates="mobile_nav" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="hide-on-med-and-down" id="comp_nav">
+        <li><a href="{% url 'index' %}">Sobre</a></li>
+        <li><a href="{% url 'hatespeech' %}">Dircursso de Ódio</a></li>
+        <li><a href="{% url 'news' %}">Notícias</a></li>
+        <li><a href="{% url 'papers' %}">Artigos Relacionados</a></li>
+        <li><a href="{% url 'contact' %}">Contato</a></li>
+      </ul>
+      <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">
+        <li><a href="{% url 'index' %}">Sobre</a></li>
+        <li><a href="{% url 'hatespeech' %}">Dircursso de Ódio</a></li>
+        <li><a href="{% url 'news' %}">Notícias</a></li>
+        <li><a href="{% url 'papers' %}">Artigos Relacionados</a></li>
+        <li><a href="{% url 'contact' %}">Contato</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer class="page-footer grey lighten-2">
+    <div class="footer-copyright">
+      <div class="container center">
+        <a href="{{ system.site_author }}" class="black-text" target="_blank">
+          {% now "Y" as current_year %}
+          <span class="hide-on-small-only">© {{ current_year }} {{ system.author }}</span>
+          <span class="hide-on-med-and-up">© {{ current_year }} {{ system.acronym_author }}</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+{% endblock layout %}

@@ -4,17 +4,43 @@
 
   <nav class="{{ system.primary_color_class }}" id="main_nav">
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo">{{ system.name }}</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+      {% if system.brand %}
+        <a href="{% url 'dashboard' %}" class="brand-logo">
+          <img src="/media/{{ system.brand }}" id="brand" alt="{{ system.name }}">
+        </a>
+      {% else %}
+        <a href="{% url 'dashboard' %}" class="brand-logo">{{ system.name }}</a>
+      {% endif %}
+
+      <a href="#" data-activates="mobile_nav" class="button-collapse"><i class="material-icons">menu</i></a>
+
+      <ul class="right hide-on-med-and-down" id="comp_nav">
+        {% if request.user.is_staff %}
+          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Admin">
+            <a href="{% url 'admin:index' %}"><i class="material-icons">lock</i></a>
+          </li>
+        {% endif %}
+        {% for item in menu %}
+          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{ item.label }}">
+            <a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i></i></a>
+          </li>
+        {% endfor %}
         {% block nav %}
         {% endblock nav %}
-        <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dados de Acesso">
-          <a href="{% url 'profile' %}"><i class="material-icons">account_box</i></a>
-        </li>
-        <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Sair">
-          <a href="{% url 'logout' %}"><i class="material-icons">exit_to_app</i></i></a>
-        </li>
       </ul>
+
+      <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">
+        {% if request.user.is_staff %}
+          <li><a href="{% url 'admin:index' %}"><i class="material-icons">lock</i>Admin</a></li>
+        {% endif %}
+        {% for item in menu %}
+          <li><a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i>{{ item.label }}</a></li>
+        {% endfor %}
+        {% block mobile_nav %}
+        {% endblock mobile_nav %}
+      </ul>
+
     </div>
   </nav>
 

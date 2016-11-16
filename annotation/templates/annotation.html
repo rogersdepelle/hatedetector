@@ -79,6 +79,12 @@
         $('#instrucoes').openModal();
       </script>
     {% endif %}
+    <script>
+    $('[name="is_hate_speech"]').change(function() {
+      $('input[type="submit"]').prop('disabled', false);
+    });
+    $('input[type="submit"]').prop('disabled', true);
+    </script>
   {% endblock script %}
 
 {% endblock content %}
