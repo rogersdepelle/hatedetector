@@ -1,0 +1,14 @@
+{% extends "template.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+  <div class="row">
+    <div class="col s12">
+    <div class="center">
+      <img src="{% static 'img/banner.jpg' %}" width="70%" >
+    </div>
+      <p align="justify">Os usuários brasileiros da Web estão entre os mais ativos em redes sociais e muito interessados em interagir uns com os outros. Embora este engajamento promova uma sociedade on-line muito participativa e colaborativa, existem usuários que não estão interessados ​​no bem comum, que ofendem aqueles que têm uma opinião contrária, ou mesmo sem motivo aparente. Estes comentários ofensivos são conhecidos como discurso de ódio. A grande quantidade de texto gerado e publicado por usuários diariamente, torna impossível filtrar manualmente comentários ofensivos. Existem iniciativas para identificar as mensagens ofensivas automaticamente, mas em sua maioria contemplam apenas a língua inglesas. Métodos de processamento de linguagem natural nem sempre alcançam os mesmos resultados em diferentes idiomas, visto que sua estrutura gramatical e vocabulário são bastante diferentes. Este projeto tem como objetivo desenvolver um método de identificação de comentários ofensivos em português, aplicando técnicas de text embeddings.</p>
+    </div>
+  </div>
+{% endblock content %}

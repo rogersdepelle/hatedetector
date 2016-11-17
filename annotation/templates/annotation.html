@@ -10,9 +10,6 @@
     <li id="count">
       {{annotation_i}}/{{annotation_n}}
     </li>
-    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard">
-      <a href="{% url 'dashboard' %}"><i class="material-icons">insert_chart</i></a>
-    </li>
 {% endblock nav %}
 
 {% block content %}
@@ -74,11 +71,17 @@
   </div>
 
   {% block script %}
-    {% if intro %}
-      <script>
-        $('#instrucoes').openModal();
-      </script>
-    {% endif %}
+    <script>
+      {% if intro %}
+        $(document).ready(function(){
+            $('#instrucoes').modal('open');
+        });
+      {% endif %}
+      $('[name="is_hate_speech"]').change(function() {
+        $('input[type="submit"]').prop('disabled', false);
+      });
+      $('input[type="submit"]').prop('disabled', true);
+    </script>
   {% endblock script %}
 
 {% endblock content %}

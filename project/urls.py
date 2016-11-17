@@ -7,8 +7,9 @@ from dashboard.models import SystemData
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^', include('website.urls')),
     url(r'^', include('dashboard.urls')),
+    url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 try:
