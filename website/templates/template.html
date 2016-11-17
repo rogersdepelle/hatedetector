@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block layout %}
+
+  <header>
+    <div class="row">
+      <div class="col s12">
+        <h3>Hate Detector</h3>
+        Sistema de detecção de comentários ofensivos na Web.
+      </div>
+    </div>
+  </header>
+
+  <nav class="{{ system.primary_color_class }}" id="main_nav">
+    <div class="nav-wrapper" id="site-nav">
+      <a href="#" data-activates="mobile_nav" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="hide-on-med-and-down" id="comp_nav">
+        <li><a href="{% url 'index' %}">Sobre</a></li>
+        <li><a href="{% url 'hatespeech' %}">Dircursso de Ódio</a></li>
+        <li><a href="{% url 'news' %}">Notícias</a></li>
+        <li><a href="{% url 'papers' %}">Artigos Relacionados</a></li>
+        <li><a href="{% url 'contact' %}">Contato</a></li>
+      </ul>
+      <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">
+        <li><a href="{% url 'index' %}">Sobre</a></li>
+        <li><a href="{% url 'hatespeech' %}">Dircursso de Ódio</a></li>
+        <li><a href="{% url 'news' %}">Notícias</a></li>
+        <li><a href="{% url 'papers' %}">Artigos Relacionados</a></li>
+        <li><a href="{% url 'contact' %}">Contato</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer class="page-footer grey lighten-2">
+    <div class="footer-copyright black-text">
+      <div class="left">
+        {% now "Y" as current_year %}
+        © {{ current_year }}
+        <a href="{{ system.site_author }}" class="black-text" target="_blank">
+          {{ system.author }}
+        </a>
+      </div>
+      <div class="right">
+        <a href="{{ system.site_author }}" class="black-text" target="_blank">UFRGS</a>
+        -
+        <a href="{{ system.site_author }}" class="black-text" target="_blank">INF</a>
+        -
+        <a href="{{ system.site_author }}" class="black-text" target="_blank">CNPq</a>
+      </div>
+    </div>
+  </footer>
+
+{% endblock layout %}
