@@ -6,19 +6,24 @@
     <div class="nav-wrapper">
 
       {% if system.brand %}
-        <a href="{% url 'dashboard' %}" class="brand-logo">
+        <a href="{% url 'annotation' %}" class="brand-logo">
           <img src="/media/{{ system.brand }}" id="brand" alt="{{ system.name }}">
         </a>
       {% else %}
-        <a href="{% url 'dashboard' %}" class="brand-logo">{{ system.name }}</a>
+        <a href="{% url 'annotation' %}" class="brand-logo">{{ system.name }}</a>
       {% endif %}
 
       <a href="#" data-activates="mobile_nav" class="button-collapse"><i class="material-icons">menu</i></a>
 
       <ul class="right hide-on-med-and-down" id="comp_nav">
+        {% block nav %}
+        {% endblock nav %}
         {% if request.user.is_staff %}
           <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Admin">
             <a href="{% url 'admin:index' %}"><i class="material-icons">lock</i></a>
+          </li>
+          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard">
+            <a href="{% url 'dashboard' %}"><i class="material-icons">insert_chart</i></a>
           </li>
         {% endif %}
         {% for item in menu %}
@@ -26,19 +31,18 @@
             <a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i></i></a>
           </li>
         {% endfor %}
-        {% block nav %}
-        {% endblock nav %}
       </ul>
 
       <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">
+        {% block mobile_nav %}
+        {% endblock mobile_nav %}
         {% if request.user.is_staff %}
           <li><a href="{% url 'admin:index' %}"><i class="material-icons">lock</i>Admin</a></li>
+          <li><a href="{% url 'dashboard' %}"><i class="material-icons">insert_chart</i>Dashboard</a></li>
         {% endif %}
         {% for item in menu %}
           <li><a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i>{{ item.label }}</a></li>
         {% endfor %}
-        {% block mobile_nav %}
-        {% endblock mobile_nav %}
       </ul>
 
     </div>

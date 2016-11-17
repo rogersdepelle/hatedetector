@@ -20,5 +20,9 @@ a:hover{
 }
 
 footer{
-	margin-top: 0px !important;
+    margin-top: 0px !important;
+}
+
+.footer-copyright{
+   padding: 0 calc(5% + 0.7rem);
 }

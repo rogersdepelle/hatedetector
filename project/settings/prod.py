@@ -14,9 +14,9 @@ SESSION_COOKIE_SECURE = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'project_name',
-        'USER': 'project_name',
-        'PASSWORD': 'project_password',
+        'NAME': 'hatedetector',
+        'USER': 'hatedetector',
+        'PASSWORD': 'senha123',
         'CONN_MAX_AGE': 60,
         'HOST': '127.0.0.1',
         'PORT': '5432',
