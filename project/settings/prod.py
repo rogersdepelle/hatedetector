@@ -16,7 +16,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hatedetector',
         'USER': 'hatedetector',
-        'PASSWORD': 'senha123',
+        'PASSWORD': '@R2hdD2#',
         'CONN_MAX_AGE': 60,
         'HOST': '127.0.0.1',
         'PORT': '5432',
