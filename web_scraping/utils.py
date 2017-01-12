@@ -49,6 +49,15 @@ def dump(request):
         response[-1]['comments'] = []
         comments = Comment.objects.filter(news=news)
         for comment in comments:
-            response[-1]['comments'].append(model_to_dict(comment, exclude=['id', 'news']))        
+            response[-1]['comments'].append(model_to_dict(comment, exclude=['id', 'news']))
 
     return JsonResponse(response, safe=False)
+
+
+def clean():
+
+    comments = Comment.objects.all()
+
+    for comment in comments:
+        comment.valid = True
+        comment.save()

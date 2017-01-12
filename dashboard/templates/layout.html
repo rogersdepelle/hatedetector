@@ -19,11 +19,11 @@
         {% block nav %}
         {% endblock nav %}
         {% if request.user.is_staff %}
-          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Admin">
-            <a href="{% url 'admin:index' %}"><i class="material-icons">lock</i></a>
-          </li>
           <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dashboard">
             <a href="{% url 'dashboard' %}"><i class="material-icons">insert_chart</i></a>
+          </li>
+          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Admin">
+            <a href="{% url 'admin:index' %}"><i class="material-icons">lock</i></a>
           </li>
         {% endif %}
         {% for item in menu %}
