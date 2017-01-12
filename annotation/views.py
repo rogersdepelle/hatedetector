@@ -1,10 +1,14 @@
 # coding: utf-8
 
+import csv
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
+
 
 from web_scraping.models import Comment
 from dashboard.utils import set_context
@@ -86,3 +90,17 @@ def dashboard(request):
     context['total'] = total
 
     return render(request, "dashboard.html", context)
+
+
+def export(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="comments.csv"'
+    comments = Comment.objects.all()
+
+    writer = csv.writer(response)
+    writer.writerow(['id','text'])
+
+    for comment in comments:
+        writer.writerow([comment.id, comment.text])
+
+    return response
