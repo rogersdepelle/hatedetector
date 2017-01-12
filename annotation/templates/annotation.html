@@ -25,7 +25,7 @@
   <form method="POST" class="row">
       {% csrf_token %}
       <div class="col m6 s12">
-        <b>Você classifica este comentário como ofensivo?</b>
+        <b>Você classifica este comentário como ofensivo? Se você fosse o moderador do site, você removeria o comentário?</b>
         {{form.is_hate_speech|materializecss:'s12'}}
       </div>
       <div class="col m6 s12">
