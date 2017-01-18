@@ -4,6 +4,7 @@
 *.sqlite3
 
 */migrations/*
+*/CACHE/*
 !*/migrations/__init__.py
 project/secret_key.txt
 media
