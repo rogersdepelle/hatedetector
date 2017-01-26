@@ -5,6 +5,7 @@
 
 */migrations/*
 !*/migrations/__init__.py
+project/static/CACHE/
 project/secret_key.txt
 media
 venv
