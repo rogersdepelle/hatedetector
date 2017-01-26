@@ -11,6 +11,6 @@ rm project/db.sqlite3
 
 ./manage.py migrate
 
-./manage.py loaddata project/fixtures/initial_data.json
+./manage.py loaddata project/fixtures/backup.json
 
 ./manage.py runserver

@@ -98,9 +98,10 @@ def export(request):
     comments = Comment.objects.all()
 
     writer = csv.writer(response)
-    writer.writerow(['id','text'])
+    writer.writerow(['id', 'a1', 'a2', 'a3', 'text'])
 
     for comment in comments:
-        writer.writerow([comment.id, comment.text])
+        annotations = Annotation.objects.filter(comment=comment)
+        writer.writerow([comment.id, annotations[0].is_hate_speech, annotations[1].is_hate_speech, annotations[2].is_hate_speech, comment.text])
 
     return response
