@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^$', annotation, name="annotation"),
     url(r'^dashboard/$', dashboard, name="dashboard"),
     url(r'^export/$', export, name="export"),
+    url(r'^arff/$', arff, name="arff"),
 ]

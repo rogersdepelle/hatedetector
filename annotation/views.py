@@ -105,3 +105,26 @@ def export(request):
         writer.writerow([comment.id, annotations[0].is_hate_speech, annotations[1].is_hate_speech, annotations[2].is_hate_speech, comment.text])
 
     return response
+
+
+def arff(request):
+    response = HttpResponse(content_type='text/arff')
+    response['Content-Disposition'] = 'attachment; filename="dataset.arff"'
+    comments = Comment.objects.all()
+
+    writer = csv.writer(response)
+    gg = 0
+    for comment in comments:
+        annotations = Annotation.objects.filter(comment=comment)
+        s = 0
+        for a in annotations:
+            if a.is_hate_speech:
+                s += 1
+        if s > 2:
+            value = 'yes'
+            gg += 1
+        else:
+            value = 'no'
+        writer.writerow([value, '\''+comment.text+'\''])
+    print(gg)
+    return response
