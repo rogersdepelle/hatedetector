@@ -1,6 +1,9 @@
 # coding: utf-8
 
 import csv
+import re
+
+from unicodedata import normalize
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
@@ -109,22 +112,46 @@ def export(request):
 
 def arff(request):
     response = HttpResponse(content_type='text/arff')
-    response['Content-Disposition'] = 'attachment; filename="dataset.arff"'
+    response['Content-Disposition'] = 'attachment; filename="default3.arff"'
     comments = Comment.objects.all()
 
+
     writer = csv.writer(response)
-    gg = 0
     for comment in comments:
         annotations = Annotation.objects.filter(comment=comment)
         s = 0
         for a in annotations:
             if a.is_hate_speech:
                 s += 1
-        if s > 2:
+        """
+        if s >= 2:
             value = 'yes'
-            gg += 1
         else:
             value = 'no'
-        writer.writerow([value, '\''+comment.text+'\''])
-    print(gg)
+        """
+        if s == 0 or s == 3:
+            if s == 3:
+                value = 'yes'
+            elif s == 0:
+                value = 'no'
+            text = normalize('NFKD',  comment.text).encode('ASCII','ignore').decode('ASCII')
+            #text = re.sub("[^a-zA-Z ]", "", text.lower())
+            text = re.sub("[^a-zA-Z ]", "", text)
+            writer.writerow([value, '\''+text+'\''])
+    return responsed
+
+
+def kappa(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="kappa.csv"'
+    comments = Comment.objects.all()
+
+    writer = csv.writer(response)
+    for comment in comments:
+        annotations = Annotation.objects.filter(comment=comment)
+        a = 1 if annotations.get(user__id=2).is_hate_speech else 0
+        b = 1 if annotations.get(user__id=3).is_hate_speech else 0
+        c = 1 if annotations.get(user_id__gt=3).is_hate_speech else 0
+        writer.writerow([a, b, c])
     return response
+

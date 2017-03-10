@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import re
 import sys
 
 from datetime import datetime
@@ -58,6 +59,10 @@ def dump(request):
 
 def anotar():
 
+    Annotation.objects.all().delete()
+
+    return
+
     comments = Comment.objects.all()
 
     for comment in comments:
@@ -71,3 +76,4 @@ def anotar():
         else:
             rogers.is_hate_speech = False
             rogers.save()
+    return

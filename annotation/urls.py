@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^dashboard/$', dashboard, name="dashboard"),
     url(r'^export/$', export, name="export"),
     url(r'^arff/$', arff, name="arff"),
+    url(r'^kappa/$', kappa, name="kappa"),
 ]

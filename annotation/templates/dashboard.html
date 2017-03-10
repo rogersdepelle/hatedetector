@@ -7,6 +7,10 @@
 {% endblock tab_title %}
 
 {% block nav %}
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export Kappa">
+      <a href="{% url 'kappa' %}"><i class="material-icons">file_download</i></a>
+    </li>
+
     <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export Arff">
       <a href="{% url 'arff' %}"><i class="material-icons">file_download</i></a>
     </li>
