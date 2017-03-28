@@ -35,6 +35,7 @@ LOCAL_APPS = [
     'annotation',
     'dashboard',
     'web_scraping',
+    'tweets',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + EXTERNAL_APPS + LOCAL_APPS

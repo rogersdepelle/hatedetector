@@ -88,6 +88,63 @@ def dashboard(request):
     else:
         form = AddAnnotationForm()
 
+    kinds = KindOfOffence.objects.all()
+
+    m = {}
+    for kind in kinds:
+        m[kind.name] = 0
+
+
+    #3
+    comments = Comment.objects.all()
+    for comment in comments:
+        kinds_list = set(k.name for k in kinds)
+        annotations = Annotation.objects.filter(comment=comment)
+        for annotation in annotations:
+            annotation_list = set(k['name'] for k in annotation.kind.values())
+            kinds_list = annotation_list.intersection(kinds_list)
+        for k in kinds_list:
+            m[k] += 1
+    print(m)
+
+    m = {}
+    for kind in kinds:
+        m[kind.name] = 0
+
+    #2
+    comments = Comment.objects.all()
+    for comment in comments:
+        n = {}
+        for kind in kinds:
+            n[kind.name] = 0
+        annotations = Annotation.objects.filter(comment=comment)
+        for annotation in annotations:
+            if annotation.is_hate_speech:
+                for k in annotation.kind.values():
+                    n[k['name']] += 1
+        for kind in kinds:
+            if n[kind.name] >= 2:
+                m[kind.name] += 1
+
+    print(m)
+
+    m = {}
+    for kind in kinds:
+        m[kind.name] = 0
+    #1
+    comments = Comment.objects.all()
+    for comment in comments:
+        annotation_list = set()
+        annotations = Annotation.objects.filter(comment=comment)
+        for annotation in annotations:
+            if annotation.is_hate_speech:
+                for k in annotation.kind.values():
+                    annotation_list.add(k['name'])
+        for k in annotation_list:
+            m[k] += 1
+
+    print(m)
+
     context['form'] = form
     context['table'] = table
     context['total'] = total
