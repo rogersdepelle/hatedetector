@@ -74,34 +74,10 @@ def get_tweets():
 
         tss = [ts1, ts2, ts3, ts4]
 
+
     except TwitterSearchException as e: # take care of all those ugly errors if there are some
         print(e)
         return
-
-    for word in keywords:
-        print(word)
-        try:
-            tso.set_keywords([word]) # let's define all words we would like to have a look for
-            # this is where the fun actually starts :)
-            for tweet in tss[x].search_tweets_iterable(tso):
-                try:
-                    Tweet.objects.create(text=tweet['text'], lang=lang)
-                except:
-                    pass
-        except TwitterSearchException as e: # take care of all those ugly errors if there are some
-            error.append(word)
-            print(e)
-
-        if x == 3:
-            x = 0;
-        else:
-            x += 1;
-
-        print(error)
-        print(Tweet.objects.count())
-
-    print(time)
-    print(datetime.now().time())
 
 
 def get_tweet_by_id():
@@ -138,25 +114,16 @@ def get_tweet_by_id():
     tweets_file.close()
 
 
-def count():
-    #run: ./manage.py shell -c="from tweets.utils import dump; dump()"
-
-    tweets = Tweet.objects.filter(lang='pt')
-    words = set()
-    count = 0
-    for tweet in tweets:
-        words = words.union(set(tweet.text.split()))
-    print(len(words))
-
-
 def dump_pt():
     #run: ./manage.py shell -c="from tweets.utils import dump_pt; dump_pt()"
+
 
     tweets = Tweet.objects.filter(lang='pt')
     bad_words = ['foda se', 'foda-se', 'vai te foder', 'vai se foder', 'vai te fuder', 'vai se foder', 'vai tomar no cu', 'vai toma no cu', 'vai tomar no rabo', 'vai toma no rabo', 'vai dar o cu', 'vai dar o rabo', 'filho da puta', 'filho da egua', 'filho de uma puta', 'filho de uma egua', 'filho duma puta', 'filho duma egua']
 
     tweets_br = open('tweets_br', 'w')
-    tweets_br_pp = open('tweets_br_pp_test', 'w')
+    tweets_br_pp = open('tweets_br_pp', 'w')
+
 
     count = 0
 
@@ -313,10 +280,3 @@ def dump_wikipedia():
 
     csvfile.close()
     wikipedia_file.close()
-
-
-def open_de():
-    csvfile = open('ross_texto.csv')
-    a = csv.reader(csvfile, delimiter=',')
-    for b in a:
-        print(b)
