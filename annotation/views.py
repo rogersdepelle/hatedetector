@@ -105,7 +105,6 @@ def dashboard(request):
             kinds_list = annotation_list.intersection(kinds_list)
         for k in kinds_list:
             m[k] += 1
-    print(m)
 
     m = {}
     for kind in kinds:
@@ -126,7 +125,6 @@ def dashboard(request):
             if n[kind.name] >= 2:
                 m[kind.name] += 1
 
-    print(m)
 
     m = {}
     for kind in kinds:
@@ -142,8 +140,6 @@ def dashboard(request):
                     annotation_list.add(k['name'])
         for k in annotation_list:
             m[k] += 1
-
-    print(m)
 
     context['form'] = form
     context['table'] = table

@@ -56,14 +56,14 @@ def comments(script, news):
     Builds the url ajax call that returns the comments in a json,
     save the comments in the database
     :param tree: object with the page's HTML
-    :return Boolean: True if the news has reviews and false if not 
+    :return Boolean: True if the news has reviews and false if not
     """
     page = 1
     n_comments = 25
 
     script = script[0].replace("\'", "\"").replace('/', "@@").split("\"")
     param = quote(script[3] + "/" + script[9] + "/" + script[5] + "/" + script[11] + "/" + script[7])
-        
+
     while n_comments == 25:
         response = get_json('http://comentarios.globo.com/comentarios/' + param + '/populares/' + str(page) + '.json')
         if not response['itens']:
@@ -98,21 +98,23 @@ def news(url, date, domain):
     Perform a request in news url, calls comments() to collect comments
     and extract the title, text and date of news.
     :param url: news link
-    :return Boolean: True if the news is valid and false if not 
+    :return Boolean: True if the news is valid and false if not
     """
     if News.objects.filter(url=url).exists():
         return False
 
     paths = ["//*[@id='glb-materia']", "//*[contains(@class, 'corpo-blog')]", "//*[contains(@class, 'widget-comentarios')]"]
     tree = html.fromstring(requests_get(url).text)
-    
+
     for path in paths:
         script = tree.xpath(path + "/script/text()")
         if script:
             break
 
     if not script:
+        print(url)
         return False
+    print('izi')
 
     post_blog = tree.xpath("//*[contains(@class, 'corpo-blog')]")
     if post_blog:
