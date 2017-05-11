@@ -3,7 +3,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from web_scraping.models import Comment
+from comments.models import Comment
 
 
 class Annotation(models.Model):

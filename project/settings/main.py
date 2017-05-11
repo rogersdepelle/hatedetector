@@ -36,6 +36,7 @@ LOCAL_APPS = [
     'dashboard',
     'web_scraping',
     'tweets',
+    'comments',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + EXTERNAL_APPS + LOCAL_APPS
