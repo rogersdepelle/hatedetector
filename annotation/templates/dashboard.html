@@ -27,19 +27,6 @@
     <div class="col m12">
       <h5>Dashboard</h5>
     </div>
-    <form method="POST" class="col m8 s12">
-        {% csrf_token %}
-        {{form.rater|materializecss:'m7'}}
-        {{form.amount|materializecss:'m3'}}
-        <div class="input-field col m2 s2">
-          <input type="submit" value="ADD" class="btn">
-        </div>
-        {% if msg %}
-          <div class="col s12 red-text">
-            {{ msg }}
-          </div>
-        {% endif %}
-    </form>
     <div class="col m3 offset-m1 s6">
         Comentários Coletados: <b>{{ n_comments }}</b>
         <p>Comentários Válidos: <b>{{ n_valid_comments }}</b></p>

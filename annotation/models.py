@@ -12,7 +12,7 @@ class Annotation(models.Model):
         verbose_name = "Annotation"
         verbose_name_plural = "Annotations"
 
-    user = models.ForeignKey(User, verbose_name='Anotador')
+    user = models.EmailField()
     comment = models.ForeignKey(Comment)
     is_hate_speech = models.NullBooleanField()
     kind = models.ManyToManyField('KindOfOffence', blank=True)

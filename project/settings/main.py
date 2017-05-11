@@ -34,7 +34,6 @@ EXTERNAL_APPS = [
 LOCAL_APPS = [
     'annotation',
     'dashboard',
-    'web_scraping',
     'tweets',
     'comments',
 ]
@@ -118,3 +117,5 @@ LOGIN_REDIRECT_URL = '/'
 # Annotation
 
 N_RATERS = 3
+
+GOAL = 100000

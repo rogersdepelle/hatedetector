@@ -46,19 +46,6 @@ def get_json(url):
         return []
 
 
-def save_name():
-    names = text.split()
-    for name in names:
-        name = normalize('NFKD',  name.lower()).encode('ASCII','ignore').decode('ASCII')
-        name = re.sub("[^a-z ]", "", name)
-        if len(name) > 3:
-            try:
-                Name.objects.create(text=name)
-            except:
-                pass
-
-
-
 def save_comment(text, new, user):
 
     text = re.sub(r'(https?:\/\/)?(w+\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)', '', text)
@@ -80,9 +67,9 @@ def save_comment(text, new, user):
 def g1_get_comments(url):
     #./manage.py shell -c="from comments.scraper import g1_get_comments; g1_get_comments()"
 
-    print(url)
-
+    site = "http://www.globo.com/"
     tree = html.fromstring(requests_get(url).text)
+    print(url)
 
     try:
         script = tree.xpath("//*[@id='SETTINGS']/text()")[0]
@@ -101,6 +88,7 @@ def g1_get_comments(url):
     n_comments = 25
 
     while n_comments == 25:
+        new = News.objects.create(url=url, site=site)
         response = get_json('http://comentarios.globo.com/comentarios/' + parameters + '/populares/' + str(page) + '.json')
         if not response['itens']:
             return False
@@ -129,14 +117,15 @@ def g1_get_comments(url):
 def folha_get_comments(id_news = 6050186):
     #./manage.py shell -c="from comments.scraper import folha_get_comments; folha_get_comments()"
 
+    site = "http://www.folha.uol.com.br/"
+
     while id_news > 0:
         id_news -= 1
         url = "http://comentarios1.folha.uol.com.br/comentarios/"+str(id_news)
 
         tree = html.fromstring(requests_get(url).text)
         try:
-            print(tree.xpath("//*[@class='more-news']//a/@href")[0])
-            #new = News.objects.create(url=tree.xpath("//*[@class='more-news']//a/@href")[0])
+            new = News.objects.create(url=tree.xpath("//*[@class='more-news']//a/@href")[0], site=site)
         except:
             print(id_news)
             continue
@@ -144,8 +133,9 @@ def folha_get_comments(id_news = 6050186):
         names = tree.xpath("//*[@id='comments']/li//h6/span/text()")
         print(comments[1])
         for i in range(0, len(comments)):
-            print(comments[i])
-            print(names[i].replace('\n','').replace('\t',''))
+            save_comment(comments[i], a, names[i].replace('\n','').replace('\t',''))
+            print()
+            print()
         return
 
 
