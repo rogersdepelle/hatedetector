@@ -23,6 +23,12 @@ label{
     color: black;
 }
 
+/* Home */
+
+.card-title {
+    font-weight: bold !important;
+}
+
 /* Annotation*/
 
 #count{

@@ -117,5 +117,3 @@ LOGIN_REDIRECT_URL = '/'
 # Annotation
 
 N_RATERS = 3
-
-GOAL = 100000

@@ -40,25 +40,18 @@
         <input type="submit" class="{{ system.primary_color_hex }} btn right" value="Próximo">
       </div>
   </form>
+
   <div id="instrucoes" class="modal">
     <div class="modal-content">
       <h5>Instruções</h5>
-        <p>
-          Prezado(a) {{ request.user.get_full_name }}, você irá nos ajudar a treinar um sistema de reconhecimento de comentários​ ofensivos.​
-        </p>
-        <p>
-          Comentários ofensivos atacam, ameaçam ou insultam uma pessoa ou grupo de pessoas por sua origem, etnia, raça, religião, gênero, orientação sexual, deficiência, etc. Nosso objetivo é reconhecê-los de forma automática e não permitir que eles sejam divulgados na Internet.
-        </p>
-        <p>
-          Iremos apresentar {{annotation_n}} comentários coletados de sites de notícias brasileiros. Sua tarefa é julgar se cada comentário pode ser considerado ofensivo, em outras palavras, se o comentário pode causar constrangimento a uma pessoa ou grupo de pessoas. Caso afirmativo, pedimos também que classifique o tipo de ofensa encontrada.​
-        </p>
+        <p>Iremos apresentar comentários coletados de sites de notícias brasileiros. Sua tarefa é julgar se cada comentário pode ser considerado ofensivo, em outras palavras, se o comentário pode causar constrangimento a uma pessoa ou grupo de pessoas. Caso afirmativo, pedimos também que classifique o tipo de ofensa encontrada, estes tipos estão descritos abaixo, caso a ofensa não se classifique em nenhum deles pedimos que insira no campo outro.</p>
     </div>
     <div class="modal-footer">
       <a href="#!" class=" modal-action modal-close btn-flat">Fechar</a>
     </div>
   </div>
 
-  <div id="classes" class="modal modal-fixed-footer">
+  <div id="classes" class="modal">
     <div class="modal-content">
       <h5>Definições das classes</h5>
       {% for type in types %}
@@ -72,11 +65,6 @@
 
   {% block script %}
     <script>
-      {% if intro %}
-        $(document).ready(function(){
-            $('#instrucoes').modal('open');
-        });
-      {% endif %}
       $('[name="is_hate_speech"]').change(function() {
         $('input[type="submit"]').prop('disabled', false);
       });

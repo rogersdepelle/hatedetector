@@ -21,7 +21,8 @@ class News(models.Model):
         verbose_name = "new"
         verbose_name_plural = "news"
 
-    url = models.URLField()
+    url = models.URLField(unique=True)
+    site = models.URLField()
 
     def __str__(self):
-        return self.text
+        return self.url

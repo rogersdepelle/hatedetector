@@ -46,7 +46,7 @@ def get_json(url):
         return []
 
 
-def save_comment(text, new, user):
+def save_comment(text, user, news):
 
     text = re.sub(r'(https?:\/\/)?(w+\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)', '', text)
     text = normalize('NFKD',  text.lower()).encode('ASCII','ignore').decode('ASCII')
@@ -56,12 +56,13 @@ def save_comment(text, new, user):
         text = text.replace(word[0], word_clean)
     text = re.sub("[^a-z ]", " ", text)
     text = re.sub(r"\b(.)\1{2,}", " ", text)
-    text = " ".join(text.split())
-
-    try:
-        Comment.objects.create(text=text, news=url, user=user)
-    except:
-        pass
+    text = text.split()
+    if len(text) > 3:
+        text = " ".join(text)
+        try:
+            Comment.objects.create(text=text, news=news, user=user)
+        except:
+            pass
 
 
 def g1_get_comments(url):
@@ -73,6 +74,7 @@ def g1_get_comments(url):
 
     try:
         script = tree.xpath("//*[@id='SETTINGS']/text()")[0]
+        news = News.objects.create(url=url, site=site)
     except:
         return
 
@@ -88,7 +90,6 @@ def g1_get_comments(url):
     n_comments = 25
 
     while n_comments == 25:
-        new = News.objects.create(url=url, site=site)
         response = get_json('http://comentarios.globo.com/comentarios/' + parameters + '/populares/' + str(page) + '.json')
         if not response['itens']:
             return False
@@ -97,7 +98,7 @@ def g1_get_comments(url):
         page += 1
 
         for comment in response['itens']:
-            save_comment(comment['texto'], comment['Usuario']['nome'], url)
+            save_comment(comment['texto'], comment['Usuario']['nome'], news)
             if comment['qtd_replies'] <= 2:
                 replies = comment['replies']
             else:
@@ -111,10 +112,10 @@ def g1_get_comments(url):
                     replies_page += 1
 
             for reply in replies:
-                save_comment(reply['texto'], reply['Usuario']['nome'], url)
+                save_comment(reply['texto'], reply['Usuario']['nome'], news)
 
 
-def folha_get_comments(id_news = 6050186):
+def folha_get_comments(id_news = 6050223):
     #./manage.py shell -c="from comments.scraper import folha_get_comments; folha_get_comments()"
 
     site = "http://www.folha.uol.com.br/"
@@ -125,18 +126,14 @@ def folha_get_comments(id_news = 6050186):
 
         tree = html.fromstring(requests_get(url).text)
         try:
-            new = News.objects.create(url=tree.xpath("//*[@class='more-news']//a/@href")[0], site=site)
+            news = News.objects.create(url=tree.xpath("//*[@class='more-news']//a/@href")[0], site=site)
         except:
-            print(id_news)
+            print("ERROR: "+str(id_news))
             continue
         comments = tree.xpath("//*[@id='comments']/li//p[1]/text()")
         names = tree.xpath("//*[@id='comments']/li//h6/span/text()")
-        print(comments[1])
         for i in range(0, len(comments)):
-            save_comment(comments[i], a, names[i].replace('\n','').replace('\t',''))
-            print()
-            print()
-        return
+            save_comment(comments[i], names[i].replace('\n','').replace('\t',''), news)
 
 
 def g1_get_urls():
@@ -156,6 +153,7 @@ def g1_get_urls():
                 urls.append(item['content']['url'])
             except:
                 pass
-        with Pool(10) as p:
-            p.map(g1_get_comments, urls)
+        for url in urls:
+            g1_get_comments(url)
         next_page = response['nextPage']
+        print(Comment.objects.all().count())

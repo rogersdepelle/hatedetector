@@ -5,9 +5,10 @@ from .views import *
 
 
 urlpatterns = [
-    url(r'^$', annotation, name="annotation"),
+    url(r'^$', home, name="home"),
+    url(r'^annotation/$', annotation, name="annotation"),
+    url(r'^start/$', start, name="start"),
     url(r'^dashboard/$', dashboard, name="dashboard"),
     url(r'^export/$', export, name="export"),
     url(r'^arff/$', arff, name="arff"),
-    url(r'^kappa/$', kappa, name="kappa"),
 ]

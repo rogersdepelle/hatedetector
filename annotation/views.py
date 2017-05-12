@@ -5,6 +5,7 @@ import re
 
 from unicodedata import normalize
 
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -14,20 +15,34 @@ from django.http import HttpResponse
 
 
 from comments.models import Comment
-from dashboard.utils import set_context
+from dashboard.utils import set_context as st
 
 from .models import Annotation, KindOfOffence
 from .forms import AnnotationForm
 
 
-@login_required(redirect_field_name=None)
+def set_context(request):
+    context = st(request)
+    context['meta'] = Comment.objects.all().count()
+    return context
+
+
+def home(request):
+    context = set_context(request)
+    return render(request, "home.html", context)
+
+#sem seção redirecionar para home
+def start(request):
+    context = set_context(request)
+    return render(request, "start.html", context)
+
+#sem seção redirecionar para home
 def annotation(request):
     context = set_context(request)
     context['types'] = KindOfOffence.objects.all()
-    user_annotations = Annotation.objects.filter(user=request.user).order_by('id')
-    remaining = user_annotations.filter(is_hate_speech=None)
-    context['annotation_n'] = user_annotations.count()
-    context['annotation_i'] = context['annotation_n'] - remaining.count()
+    remaining = Annotation.objects.all()
+    context['annotation_n'] = 100
+    context['annotation_i'] = 45
 
     if context['annotation_n'] == 0:
         return render(request, "without_notes.html", context)

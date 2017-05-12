@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% load staticfiles %}
+
+{% block tab_title %}
+  {{ system.name }}
+{% endblock tab_title %}
+
+{% block nav %}
+{% endblock nav %}
+
+{% block content %}
+  <div class="row">
+    <div class="col m9 s12">
+      <div class="row" style="margin-bottom: 0px;">
+        <div class="col s12 m6">
+          <div class="card teal lighten-2" id="card1">
+            <div class="card-content white-text">
+              <span class="card-title">Discursso de Ódio</span>
+              <p align="justify">É qualquer texto que contenha ódio e/ou incitação a discriminação, hostilidade e violência contra uma pessoa ou grupo em virtude de raça, religião, origem, orientação sexual, gênero, ou outra característica.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="card teal darken-1" id="card2">
+            <img src="{% static 'img/hate.jpeg' %}" class="responsive-img materialboxed" width="100%">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="card teal darken-2" id="card3">
+            <div class="card-content white-text">
+              <span class="card-title">Nosso Projeto</span>
+              <p align="justify">A quantidade de textos publicados na web é muito grande, tornando impossível tudo fiscalizar de forma manual, portanto, temos como objetivo desenvolver um sistema que possa identificar de comentários ofensivos de forma automática.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="card teal accent-4" id="card4">
+            <div class="card-content white-text">
+              <span class="card-title">Como Ajudar</span>
+              <p align="justify">Para que nosso sistema possa aprender a classificar um comentário, ele precisa ler muitos comentários classificados, você pode ajudar classificando estes comentários. É uma tarefa muito simples, basta clicar em começar para receber mais instruções.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 0px;">
+        <div class="col s9">
+          <a class="btn-floating  blue darken-3" href="https://www.facebook.com/sharer/sharer.php?u=http://inf.ufrgs.br/~rppelle/hatedetector/" target="_blank"><i class="fa fa-facebook"></i></a>
+          <a class="btn-floating  blue " href="https://twitter.com/share?via=rogersdepelle&related=twitterapi%2Ctwitter&hashtags=hatedetector&text=Ajude%20a%20tornar%20a%20web%20um%20lugar%20mais%20legal%20" target="_blank">
+            <i class="fa fa-twitter"></i>
+          </a>
+        </div>
+        <div class="col s3">
+          <a href="{% url 'start' %}" class="btn teal right">Começar</a>
+        </div>
+      </div>
+    </div>
+    <div class="col m3 s12">
+      <br><h5 class="center">Meta do Projeto</h5><br>
+      <canvas id="myChart" width="100%" height="100%"></canvas>
+      <p align="center">Nossa meta é classificar {{ meta }} comentários, até o momentos já conseguimos 43.000.</p>
+    </div>
+  </div>
+
+  {% block script %}
+    <script>
+      var ctx = document.getElementById("myChart");
+      var myChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+              labels: ["Ofensivos", "Não Ofensivos", "Não Classificados"],
+              datasets: [{
+                  label: '# of Votes',
+                  data: [2000, 5000, {{meta}}],
+                  backgroundColor: [
+                      '#f44336',
+                      '#00c853',
+                      '#1e88e5',
+                  ],
+              }]
+          },
+          options: {
+            legend: {
+              position: 'bottom',
+            }
+          }
+      });
+      </script>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  {% endblock script %}
+
+{% endblock content %}
