@@ -8,7 +8,7 @@
 
 {% block nav %}
     <li id="count">
-      {{annotation_i}}/{{annotation_n}}
+      Comentários Classificados: {{annotation_n}}
     </li>
 {% endblock nav %}
 
@@ -17,9 +17,9 @@
     <div class="col m12">
       <p>
         <b>O comentário abaixo foi escrito em um site de notícias:</b>
-        <a href="{{ annotation.comment.news.url }}" class="right" target="_blank">Clique aqui para ver a notícia</a>
+        <a href="{{ comment.news.url }}" class="right" target="_blank">Clique aqui para ver a notícia</a>
       </p>
-      <i>"{{ annotation.comment.text }}"</i>
+      <i>"{{ comment.text }}"</i>
     </div>
   </div>
   <form method="POST" class="row">
@@ -35,8 +35,11 @@
         {{form.other|materializecss:'s6'}}
       </div>
       <div class="col s12">
-        <a class="modal-trigger" href="#instrucoes">Instruções</a><br>
+        <a class="modal-trigger" href="#instrucoes">Instruções</a>
+        |
         <a class="modal-trigger" href="#classes">Definições das Classes</a>
+        |
+        <a href="{% url 'home' %}">Sair</a>
         <input type="submit" class="{{ system.primary_color_hex }} btn right" value="Próximo">
       </div>
   </form>
@@ -44,7 +47,9 @@
   <div id="instrucoes" class="modal">
     <div class="modal-content">
       <h5>Instruções</h5>
-        <p>Iremos apresentar comentários coletados de sites de notícias brasileiros. Sua tarefa é julgar se cada comentário pode ser considerado ofensivo, em outras palavras, se o comentário pode causar constrangimento a uma pessoa ou grupo de pessoas. Caso afirmativo, pedimos também que classifique o tipo de ofensa encontrada, estes tipos estão descritos abaixo, caso a ofensa não se classifique em nenhum deles pedimos que insira no campo outro.</p>
+        <p>Prezado(a) participante, você irá nos ajudar a treinar um sistema de reconhecimento de comentários​ fensivos.​ Antes de iniciar pedimos que leia as instruções até o final, solicitamos que insira seu e-mail para que possamos calcular o nível de concordância dos anotadores, não o divulgaremos, enviaremos apenas um e-mail ao final das pesquisa para informar os resultados e agradecer por sua participação.</p>
+        <p>Você pode participar quantas vezes quiser classificando quantos comentários quiser por vez, basta inserir o mesmo e-mail e continuar anotando, você também pode convidar enviando o link deste site ou campartilhanto em suas redes sociais. Temos uma meta de classificar {{ meta }} comentários, quanto mais pessoas colaborarem, mais rápido iremos conseguir.</p>
+        <p>Seram apresentados comentários coletados de sites de notícias brasileiros. Sua tarefa é julgar se cada comentário pode ser considerado ofensivo, em outras palavras, se o comentário pode causar constrangimento a uma pessoa ou grupo de pessoas. Caso afirmativo, pedimos também que classifique o tipo de ofensa encontrada, estes tipos estão descritos abaixo, caso a ofensa não se classifique em nenhum deles pedimos que insira no campo outro.</p>
     </div>
     <div class="modal-footer">
       <a href="#!" class=" modal-action modal-close btn-flat">Fechar</a>
@@ -66,9 +71,18 @@
   {% block script %}
     <script>
       $('[name="is_hate_speech"]').change(function() {
+        if($('[id="id_is_hate_speech_0"]').is(":checked")){
+            $('input[type="checkbox"]').prop('disabled', false);
+            $('input[type="text"]').prop('disabled', false);
+        }
+        else{
+          $('input[type="checkbox"]').prop('disabled', true);
+        }
         $('input[type="submit"]').prop('disabled', false);
       });
       $('input[type="submit"]').prop('disabled', true);
+      $('input[type="checkbox"]').prop('disabled', true);
+      $('input[type="text"]').prop('disabled', true);
     </script>
   {% endblock script %}
 

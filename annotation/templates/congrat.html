@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% load staticfiles %}
+
+{% block tab_title %}
+  {{ system.name }}
+{% endblock tab_title %}
+
+{% block nav %}
+{% endblock nav %}
+
+{% block content %}
+  <div class="row">
+    <div class="col m8 offset-m2 s12">
+      <h4>Obrigado por participar da pesquisa!</h4>
+      <p>Assim que obtivermos os resultados vamos encaminhar uma e-mail para que você saiba o quão importante foi sua participação.</p>
+      <p class="right">
+        <a href="{% url 'home' %}">Voltar para a página inicial</a>
+      </p>
+    </div>
+  </div>
+
+{% endblock content %}

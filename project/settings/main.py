@@ -117,3 +117,5 @@ LOGIN_REDIRECT_URL = '/'
 # Annotation
 
 N_RATERS = 3
+
+MIN_AGREEMENT = 2

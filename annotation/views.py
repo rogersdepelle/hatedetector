@@ -1,11 +1,7 @@
 # coding: utf-8
 
-import csv
 import re
 
-from unicodedata import normalize
-
-from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -17,52 +13,86 @@ from django.http import HttpResponse
 from comments.models import Comment
 from dashboard.utils import set_context as st
 
-from .models import Annotation, KindOfOffence
-from .forms import AnnotationForm
+from .models import Annotation, Annotator, KindOfOffence
+from .forms import AnnotationForm, AnnotatorForm
 
 
 def set_context(request):
     context = st(request)
     context['meta'] = Comment.objects.all().count()
+    context['types'] = KindOfOffence.objects.all()
     return context
 
 
 def home(request):
     context = set_context(request)
+    context['neg'], context['pos'] = Annotation.status()
     return render(request, "home.html", context)
 
-#sem seção redirecionar para home
+
+def congrat(request):
+    context = set_context(request)
+    return render(request, "congrat.html", context)
+
+
 def start(request):
     context = set_context(request)
-    return render(request, "start.html", context)
-
-#sem seção redirecionar para home
-def annotation(request):
-    context = set_context(request)
-    context['types'] = KindOfOffence.objects.all()
-    remaining = Annotation.objects.all()
-    context['annotation_n'] = 100
-    context['annotation_i'] = 45
-
-    if context['annotation_n'] == 0:
-        return render(request, "without_notes.html", context)
-
-    if remaining.count() == 0:
-        context['classifications'] = user_annotations.count()
-        context['positive'] = user_annotations.filter(is_hate_speech=True).count()
-        context['negative'] = user_annotations.filter(is_hate_speech=False).count()
-        return render(request, "completed.html", context)
 
     if request.POST:
-        form = AnnotationForm(request.POST, instance=remaining[0])
+        request.session['pretest'] = 0
+        try:
+            request.session['annotator'] = Annotator.objects.get(email=request.POST['email']).email
+            return redirect('annotation')
+        except:
+            form = AnnotatorForm(request.POST)
+            if form.is_valid():
+                request.session['annotator'] = form.save().email
+                return redirect('annotation')
+    else:
+        form = AnnotatorForm()
+
+    context['form'] = form
+
+    return render(request, "start.html", context)
+
+
+def annotation(request):
+    context = set_context(request)
+
+    try:
+        annotator = Annotator.objects.get(email=request.session['annotator'])
+    except:
+        return redirect('home')
+
+    if annotator.approved == False:
+        return redirect('congrat')
+
+    if annotator.approved:
+        comment, end = annotator.get_available()
+        if end:
+          return redirect('congrat')
+
+    elif annotator.approved == None:
+        annotations = Annotation.get_pretest()
+        if int(request.session['pretest']) == len(annotations):
+            annotator.rating()
+            return redirect('annotation')
+        else:
+            annotation = annotations[request.session['pretest']]
+            comment = annotation.comment
+
+    if request.POST:
+        form = AnnotationForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save(annotator=annotator, comment=comment)
+            request.session['pretest'] += 1
             return redirect('annotation')
     else:
-        form = AnnotationForm(instance=remaining[0])
+        form = AnnotationForm()
 
-    context['annotation'] = remaining[0]
     context['form'] = form
+    context['comment'] = comment
+    context['annotation_n'] = Annotation.objects.filter(annotator=annotator).count()
 
     return render(request, "annotation.html", context)
 
@@ -70,23 +100,10 @@ def annotation(request):
 @staff_member_required
 def dashboard(request):
     context = set_context(request)
+    context['neg'], context['pos'] = Annotation.status()
+    context['n_annotations'] = Annotation.objects.all().count()
+    context['n_annotators']= Annotator.objects.all().count()
     return render(request, "dashboard.html", context)
-
-
-@staff_member_required
-def export(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="comments.csv"'
-    comments = Comment.objects.all()
-
-    writer = csv.writer(response)
-    writer.writerow(['id', 'a1', 'a2', 'a3', 'text'])
-
-    for comment in comments:
-        annotations = Annotation.objects.filter(comment=comment)
-        writer.writerow([comment.id, annotations[0].is_hate_speech, annotations[1].is_hate_speech, annotations[2].is_hate_speech, comment.text])
-
-    return response
 
 
 @staff_member_required

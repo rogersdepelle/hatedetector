@@ -25,12 +25,12 @@
           <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Admin">
             <a href="{% url 'admin:index' %}"><i class="material-icons">lock</i></a>
           </li>
+          {% for item in menu %}
+            <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{ item.label }}">
+              <a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i></i></a>
+            </li>
+          {% endfor %}
         {% endif %}
-        {% for item in menu %}
-          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{ item.label }}">
-            <a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i></i></a>
-          </li>
-        {% endfor %}
       </ul>
 
       <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">

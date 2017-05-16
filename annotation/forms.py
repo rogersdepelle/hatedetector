@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 from comments.models import Comment
 
-from .models import Annotation
+from .models import Annotation, Annotator
 
 
 class AnnotationForm(forms.ModelForm):
@@ -22,3 +22,21 @@ class AnnotationForm(forms.ModelForm):
         model = Annotation
         fields = ('is_hate_speech', 'kind', 'other')
         widgets = {'kind': forms.CheckboxSelectMultiple(),}
+
+
+    def save(self, annotator, comment, commit=True):
+        instance = super(AnnotationForm, self).save(commit=False)
+        instance.annotator = annotator
+        instance.comment = comment
+        if commit:
+            instance.save()
+        self.save_m2m()
+        return instance
+
+
+
+class AnnotatorForm(forms.ModelForm):
+
+    class Meta:
+        model = Annotator
+        fields = ('email',)

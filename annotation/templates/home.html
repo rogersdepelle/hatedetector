@@ -16,7 +16,7 @@
         <div class="col s12 m6">
           <div class="card teal lighten-2" id="card1">
             <div class="card-content white-text">
-              <span class="card-title">Discursso de Ódio</span>
+              <span class="card-title">Discurso de Ódio</span>
               <p align="justify">É qualquer texto que contenha ódio e/ou incitação a discriminação, hostilidade e violência contra uma pessoa ou grupo em virtude de raça, religião, origem, orientação sexual, gênero, ou outra característica.</p>
             </div>
           </div>
@@ -60,7 +60,9 @@
     <div class="col m3 s12">
       <br><h5 class="center">Meta do Projeto</h5><br>
       <canvas id="myChart" width="100%" height="100%"></canvas>
-      <p align="center">Nossa meta é classificar {{ meta }} comentários, até o momentos já conseguimos 43.000.</p>
+      <p align="center">
+        Nossa meta é classificar {{ meta }} comentários, até o momentos já {{ neg|add:pos }} foram classificados.
+      </p>
     </div>
   </div>
 
@@ -70,10 +72,10 @@
       var myChart = new Chart(ctx, {
           type: 'doughnut',
           data: {
-              labels: ["Ofensivos", "Não Ofensivos", "Não Classificados"],
+              labels: [" Ofensivos", " Não Ofensivos", " Não Classificados"],
               datasets: [{
                   label: '# of Votes',
-                  data: [2000, 5000, {{meta}}],
+                  data: [{{pos}}, {{neg}}, {{meta}}],
                   backgroundColor: [
                       '#f44336',
                       '#00c853',

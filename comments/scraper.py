@@ -65,6 +65,28 @@ def save_comment(text, user, news):
             pass
 
 
+def folha_get_comments(id_news = 6050630):
+    #./manage.py shell -c="from comments.scraper import folha_get_comments; folha_get_comments()"
+
+    site = "http://www.folha.uol.com.br/"
+
+    while id_news > 0:
+        id_news -= 1
+        url = "http://comentarios1.folha.uol.com.br/comentarios/"+str(id_news)
+
+        tree = html.fromstring(requests_get(url).text)
+
+        try:
+            news = News.objects.create(url=tree.xpath("//*[@class='more-news']//a/@href")[0], site=site)
+        except:
+            print("ERROR: "+str(id_news))
+            continue
+        comments = tree.xpath("//*[@id='comments']/li//p[1]/text()")
+        names = tree.xpath("//*[@id='comments']/li//h6/span/text()")
+        for i in range(0, len(comments)):
+            save_comment(comments[i], names[i].replace('\n','').replace('\t',''), news)
+
+
 def g1_get_comments(url):
     #./manage.py shell -c="from comments.scraper import g1_get_comments; g1_get_comments()"
 
@@ -115,45 +137,27 @@ def g1_get_comments(url):
                 save_comment(reply['texto'], reply['Usuario']['nome'], news)
 
 
-def folha_get_comments(id_news = 6050223):
-    #./manage.py shell -c="from comments.scraper import folha_get_comments; folha_get_comments()"
-
-    site = "http://www.folha.uol.com.br/"
-
-    while id_news > 0:
-        id_news -= 1
-        url = "http://comentarios1.folha.uol.com.br/comentarios/"+str(id_news)
-
-        tree = html.fromstring(requests_get(url).text)
-        try:
-            news = News.objects.create(url=tree.xpath("//*[@class='more-news']//a/@href")[0], site=site)
-        except:
-            print("ERROR: "+str(id_news))
-            continue
-        comments = tree.xpath("//*[@id='comments']/li//p[1]/text()")
-        names = tree.xpath("//*[@id='comments']/li//h6/span/text()")
-        for i in range(0, len(comments)):
-            save_comment(comments[i], names[i].replace('\n','').replace('\t',''), news)
-
-
 def g1_get_urls():
     #./manage.py shell -c="from comments.scraper import g1_get_urls; g1_get_urls()"
 
-    domain = "http://falkor-cda.bastian.globo.com/feeds/8d7daa58-07fd-45c9-b1fe-aaa654957850/posts/page/" # G1 Política
-    #domain = "http://falkor-cda.bastian.globo.com/feeds/93a4eb4b-8a93-4c09-b080-4ba92a01d142/posts/page/" # Globo Esporte
-    #domain = "http://falkor-cda.bastian.globo.com/feeds/e9d5d133-bc15-417d-8722-0f44e23f0f7b/posts/page/" # G1 Economia
+    domains = ["http://falkor-cda.bastian.globo.com/feeds/8d7daa58-07fd-45c9-b1fe-aaa654957850/posts/page/"] # G1 Política
+    domains.append("http://falkor-cda.bastian.globo.com/feeds/93a4eb4b-8a93-4c09-b080-4ba92a01d142/posts/page/") # Globo Esporte
+    domains.append("http://falkor-cda.bastian.globo.com/feeds/e9d5d133-bc15-417d-8722-0f44e23f0f7b/posts/page/") # G1 Economia
 
     next_page = 1
 
-    while next_page != 0:
-        response = requests_get(domain + str(next_page)).json()
-        urls = []
-        for item in response['items']:
+    for domain in domains:
+        while next_page != 0:
+            response = requests_get(domain + str(next_page)).json()
+            urls = []
+            for item in response['items']:
+                try:
+                    urls.append(item['content']['url'])
+                except:
+                    pass
+            for url in urls:
+                g1_get_comments(url)
             try:
-                urls.append(item['content']['url'])
+                next_page = response['nextPage']
             except:
-                pass
-        for url in urls:
-            g1_get_comments(url)
-        next_page = response['nextPage']
-        print(Comment.objects.all().count())
+                next_page = 0
