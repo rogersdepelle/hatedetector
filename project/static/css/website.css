@@ -17,6 +17,7 @@ header h3{
 
 a:hover{
     font-weight: bold;
+    cursor: pointer !important;
 }
 
 footer{

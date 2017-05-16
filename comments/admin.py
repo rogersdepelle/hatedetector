@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Comment, Domain, News
+from .models import Comment, News
 
 from django.db.models import Transform
 from django.db.models import TextField
@@ -27,9 +27,9 @@ class TextLengthListFilter(admin.SimpleListFilter):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_filter = ('news__domain','valid', TextLengthListFilter)
+    list_filter = ([TextLengthListFilter, 'news__site'])
+    list_display = (['text', 'news'])
 
 
-admin.site.register(Comment, CommentAdmin)
-admin.site.register(Domain)
 admin.site.register(News)
+admin.site.register(Comment, CommentAdmin)

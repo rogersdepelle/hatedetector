@@ -6,11 +6,11 @@
     <div class="nav-wrapper">
 
       {% if system.brand %}
-        <a href="{% url 'annotation' %}" class="brand-logo">
+        <a href="{% url 'home' %}" class="brand-logo">
           <img src="/media/{{ system.brand }}" id="brand" alt="{{ system.name }}">
         </a>
       {% else %}
-        <a href="{% url 'annotation' %}" class="brand-logo">{{ system.name }}</a>
+        <a href="{% url 'home' %}" class="brand-logo">{{ system.name }}</a>
       {% endif %}
 
       <a href="#" data-activates="mobile_nav" class="button-collapse"><i class="material-icons">menu</i></a>
@@ -25,12 +25,12 @@
           <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Admin">
             <a href="{% url 'admin:index' %}"><i class="material-icons">lock</i></a>
           </li>
+          {% for item in menu %}
+            <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{ item.label }}">
+              <a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i></i></a>
+            </li>
+          {% endfor %}
         {% endif %}
-        {% for item in menu %}
-          <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{ item.label }}">
-            <a href="{% url item.url %}"><i class="material-icons">{{ item.icon }}</i></i></a>
-          </li>
-        {% endfor %}
       </ul>
 
       <ul class="side-nav {{ system.primary_color_class }}" id="mobile_nav">
@@ -54,11 +54,15 @@
 
   <footer class="page-footer grey lighten-2">
     <div class="footer-copyright">
-      <div class="container center">
+      <div class="container center black-text">
+        Mais sobre o Projeto:
+        <a href="http://inf.ufrgs.br/~rppelle/hatedetector/" class="black-text" target="_blank">
+          Hate Dector
+        </a>
+        |
+        Desenvolvido por:
         <a href="{{ system.site_author }}" class="black-text" target="_blank">
-          {% now "Y" as current_year %}
-          <span class="hide-on-small-only">© {{ current_year }} {{ system.author }}</span>
-          <span class="hide-on-med-and-up">© {{ current_year }} {{ system.acronym_author }}</span>
+         {{ system.author }}
         </a>
       </div>
     </div>

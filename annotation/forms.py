@@ -3,36 +3,9 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from web_scraping.models import Comment
+from comments.models import Comment
 
-from .models import Annotation
-
-
-class AddAnnotationForm(forms.Form):
-    User.__str__ = User.get_full_name
-    rater = forms.ModelChoiceField(queryset=User.objects.filter(is_superuser=False), empty_label="Selecione Anotador.", label='')
-    amount = forms.IntegerField(min_value=1, label='Quantidade')
-
-    def save(self):
-        amount = self.cleaned_data['amount']
-        rater = self.cleaned_data['rater']
-        all_comments = Comment.objects.filter(valid=True)
-        all_annotations = Annotation.objects.all()
-        comments = []
-
-        for comment in all_comments:
-            if not all_annotations.filter(comment=comment, user=rater).exists() and all_annotations.filter(comment=comment).count() < settings.N_RATERS:
-                comments.append(comment)
-            if len(comments) == amount:
-                break
-
-        if len(comments) < amount:
-            return 0
-
-        for comment in comments:
-            Annotation.objects.create(user=rater, comment=comment)
-
-        return len(comments)
+from .models import Annotation, Annotator
 
 
 class AnnotationForm(forms.ModelForm):
@@ -49,3 +22,21 @@ class AnnotationForm(forms.ModelForm):
         model = Annotation
         fields = ('is_hate_speech', 'kind', 'other')
         widgets = {'kind': forms.CheckboxSelectMultiple(),}
+
+
+    def save(self, annotator, comment, commit=True):
+        instance = super(AnnotationForm, self).save(commit=False)
+        instance.annotator = annotator
+        instance.comment = comment
+        if commit:
+            instance.save()
+        self.save_m2m()
+        return instance
+
+
+
+class AnnotatorForm(forms.ModelForm):
+
+    class Meta:
+        model = Annotator
+        fields = ('email',)
