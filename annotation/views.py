@@ -27,6 +27,7 @@ def set_context(request):
 def home(request):
     context = set_context(request)
     context['neg'], context['pos'] = Annotation.status()
+    context['unclas'] = context['meta'] -context['neg'] - context['pos']
     return render(request, "home.html", context)
 
 
@@ -101,8 +102,9 @@ def annotation(request):
 def dashboard(request):
     context = set_context(request)
     context['neg'], context['pos'] = Annotation.status()
+    context['unclas'] = context['meta'] -context['neg'] - context['pos']
     context['n_annotations'] = Annotation.objects.all().count()
-    context['n_annotators']= Annotator.objects.all().count()
+    context['n_annotators']= Annotator.objects.filter(approved=True).count()
     return render(request, "dashboard.html", context)
 
 

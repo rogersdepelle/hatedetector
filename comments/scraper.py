@@ -65,7 +65,7 @@ def save_comment(text, user, news):
             pass
 
 
-def folha_get_comments(id_news = 6050630):
+def folha_get_comments(id_news = 6050650):
     #./manage.py shell -c="from comments.scraper import folha_get_comments; folha_get_comments()"
 
     site = "http://www.folha.uol.com.br/"
