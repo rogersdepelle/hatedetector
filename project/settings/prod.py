@@ -5,7 +5,7 @@ from .main import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['hatedetector.ga, www.hatedetector.ga']
 
 CSRF_COOKIE_SECURE = False
 

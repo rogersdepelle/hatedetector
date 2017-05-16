@@ -12,9 +12,9 @@ class TextLengthListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return (
-            ('1', 'De 01 a 50'),
-            ('2', 'De 51 a 100'),
-            ('3', '101 ou Mais'),
+            ('1', 'de 01 a 50'),
+            ('2', 'de 50 a 100'),
+            ('3', '100 ou mais'),
         )
 
     def queryset(self, request, queryset):
