@@ -34,7 +34,8 @@ EXTERNAL_APPS = [
 LOCAL_APPS = [
     'annotation',
     'dashboard',
-    'web_scraping',
+    'tweets',
+    'comments',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + EXTERNAL_APPS + LOCAL_APPS
@@ -116,3 +117,5 @@ LOGIN_REDIRECT_URL = '/'
 # Annotation
 
 N_RATERS = 3
+
+MIN_AGREEMENT = 2

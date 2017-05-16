@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import csv
+import re
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
@@ -10,41 +10,90 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 
-from web_scraping.models import Comment
-from dashboard.utils import set_context
+from comments.models import Comment
+from dashboard.utils import set_context as st
 
-from .models import Annotation, KindOfOffence
-from .forms import AddAnnotationForm, AnnotationForm
+from .models import Annotation, Annotator, KindOfOffence
+from .forms import AnnotationForm, AnnotatorForm
 
 
-@login_required(redirect_field_name=None)
-def annotation(request):
-    context = set_context(request)
+def set_context(request):
+    context = st(request)
+    context['meta'] = Comment.objects.all().count()
     context['types'] = KindOfOffence.objects.all()
-    user_annotations = Annotation.objects.filter(user=request.user).order_by('id')
-    remaining = user_annotations.filter(is_hate_speech=None)
-    context['annotation_n'] = user_annotations.count()
-    context['annotation_i'] = context['annotation_n'] - remaining.count()
+    return context
 
-    if context['annotation_n'] == 0:
-        return render(request, "without_notes.html", context)
 
-    if remaining.count() == 0:
-        context['classifications'] = user_annotations.count()
-        context['positive'] = user_annotations.filter(is_hate_speech=True).count()
-        context['negative'] = user_annotations.filter(is_hate_speech=False).count()
-        return render(request, "completed.html", context)
+def home(request):
+    context = set_context(request)
+    context['neg'], context['pos'] = Annotation.status()
+    context['unclas'] = context['meta'] -context['neg'] - context['pos']
+    return render(request, "home.html", context)
+
+
+def congrat(request):
+    context = set_context(request)
+    return render(request, "congrat.html", context)
+
+
+def start(request):
+    context = set_context(request)
 
     if request.POST:
-        form = AnnotationForm(request.POST, instance=remaining[0])
+        request.session['pretest'] = 0
+        try:
+            request.session['annotator'] = Annotator.objects.get(email=request.POST['email']).email
+            return redirect('annotation')
+        except:
+            form = AnnotatorForm(request.POST)
+            if form.is_valid():
+                request.session['annotator'] = form.save().email
+                return redirect('annotation')
+    else:
+        form = AnnotatorForm()
+
+    context['form'] = form
+
+    return render(request, "start.html", context)
+
+
+def annotation(request):
+    context = set_context(request)
+
+    try:
+        annotator = Annotator.objects.get(email=request.session['annotator'])
+    except:
+        return redirect('home')
+
+    if annotator.approved == False:
+        return redirect('congrat')
+
+    if annotator.approved:
+        comment, end = annotator.get_available()
+        if end:
+          return redirect('congrat')
+
+    elif annotator.approved == None:
+        annotations = Annotation.get_pretest()
+        if int(request.session['pretest']) == len(annotations):
+            annotator.rating()
+            return redirect('annotation')
+        else:
+            annotation = annotations[request.session['pretest']]
+            comment = annotation.comment
+
+    if request.POST:
+        form = AnnotationForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save(annotator=annotator, comment=comment)
+            request.session['pretest'] += 1
             return redirect('annotation')
     else:
-        form = AnnotationForm(instance=remaining[0])
+        form = AnnotationForm()
 
-    context['annotation'] = remaining[0]
     context['form'] = form
+    context['comment'] = comment
+    context['annotation_n'] = Annotation.objects.filter(annotator=annotator).count()
 
     return render(request, "annotation.html", context)
 
@@ -52,56 +101,43 @@ def annotation(request):
 @staff_member_required
 def dashboard(request):
     context = set_context(request)
-    table = []
-    total = {}
-    comments = Comment.objects.all()
-    users = User.objects.filter(is_superuser=False)
-    annotations = Annotation.objects.all()
-
-    for user in users:
-        item = {}
-        item['user'] = user.get_full_name()
-        user_annotations = annotations.filter(user=user)
-        item['classifications'] = user_annotations.count()
-        item['positive'] = user_annotations.filter(is_hate_speech=True).count()
-        item['negative'] = user_annotations.filter(is_hate_speech=False).count()
-        item['remaining'] = user_annotations.filter(is_hate_speech=None).count()
-        table.append(item)
-    total['users'] = users.count()
-    total['classifications'] = annotations.count()
-    total['positive'] = annotations.filter(is_hate_speech=True).count()
-    total['negative'] = annotations.filter(is_hate_speech=False).count()
-    total['remaining'] = annotations.filter(is_hate_speech=None).count()
-    context['n_valid_comments'] = comments.filter(valid=True).count()
-    context['n_comments'] = comments.count()
-
-    if request.POST:
-        form = AddAnnotationForm(request.POST)
-        if form.is_valid():
-            if form.save() > 0:
-                return redirect('dashboard')
-            else:
-                context['msg'] = "Não existem comentários válidos disponíveis."
-    else:
-        form = AddAnnotationForm()
-
-    context['form'] = form
-    context['table'] = table
-    context['total'] = total
-
+    context['neg'], context['pos'] = Annotation.status()
+    context['unclas'] = context['meta'] -context['neg'] - context['pos']
+    context['n_annotations'] = Annotation.objects.all().count()
+    context['n_annotators']= Annotator.objects.filter(approved=True).count()
     return render(request, "dashboard.html", context)
 
 
-def export(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="comments.csv"'
+@staff_member_required
+def arff(request, raters=3):
+    response = HttpResponse(content_type='text/arff')
+    response['Content-Disposition'] = 'attachment; filename="default3.arff"'
     comments = Comment.objects.all()
 
-    writer = csv.writer(response)
-    writer.writerow(['id', 'a1', 'a2', 'a3', 'text'])
 
+    writer = csv.writer(response)
     for comment in comments:
         annotations = Annotation.objects.filter(comment=comment)
-        writer.writerow([comment.id, annotations[0].is_hate_speech, annotations[1].is_hate_speech, annotations[2].is_hate_speech, comment.text])
+        s = 0
+        for a in annotations:
+            if a.is_hate_speech:
+                s += 1
 
-    return response
+        if raters == 2:
+            if s >= 2:
+                value = 'yes'
+            else:
+                value = 'no'
+        else:
+            if s == 0 or s == 3:
+                if s == 3:
+                    value = 'yes'
+                elif s == 0:
+                    value = 'no'
+        writer.writerow([value, '\''+comment.text+'\''])
+    return responsed
+
+
+def kappa(request):
+    return 0.5
+

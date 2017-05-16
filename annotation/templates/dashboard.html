@@ -7,8 +7,8 @@
 {% endblock tab_title %}
 
 {% block nav %}
-    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export">
-      <a href="{% url 'export' %}"><i class="material-icons">file_download</i></a>
+    <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export Arff">
+      <a href="{% url 'arff' %}"><i class="material-icons">file_download</i></a>
     </li>
     <li class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Classificação">
       <a href="{% url 'annotation' %}"><i class="material-icons">comment</i></a>
@@ -20,53 +20,42 @@
     <div class="col m12">
       <h5>Dashboard</h5>
     </div>
-    <form method="POST" class="col m8 s12">
-        {% csrf_token %}
-        {{form.rater|materializecss:'m7'}}
-        {{form.amount|materializecss:'m3'}}
-        <div class="input-field col m2 s2">
-          <input type="submit" value="ADD" class="btn">
-        </div>
-        {% if msg %}
-          <div class="col s12 red-text">
-            {{ msg }}
-          </div>
-        {% endif %}
-    </form>
-    <div class="col m3 offset-m1 s6">
-        Comentários Coletados: <b>{{ n_comments }}</b>
-        <p>Comentários Válidos: <b>{{ n_valid_comments }}</b></p>
+    <div class="col m3">
+      <p>Comentários: <b>{{ meta }}</b></p>
+      <p>Comentários Positivos: <b>{{ pos }}</b></p>
+      <p>Comentários Negativos: <b>{{ neg }}</b></p>
+      <p>Classificações: <b>{{ n_annotations }}</b></p>
+      <p>Anotadores: <b>{{ n_annotators }}</b></p>
     </div>
-    <div class="col m12">
-      <table class="striped centered">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Classificações</th>
-            <th>Positivas</th>
-            <th>Negativas</th>
-            <th>Restantes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in table %}
-            <tr>
-              <td class="left">{{ item.user }}</td>
-              <td>{{ item.classifications }}</td>
-              <td>{{ item.positive }}</td>
-              <td>{{ item.negative }}</td>
-              <td>{{ item.remaining }}</td>
-            </tr>
-          {% endfor %}
-          <tr>
-            <td><b>{{ total.users }}</b></td>
-            <td><b>{{ total.classifications }}</b></td>
-            <td><b>{{ total.positive }}</b></td>
-            <td><b>{{ total.negative }}</b></td>
-            <td><b>{{ total.remaining }}</b></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col m6">
+      <canvas id="myChart" height="100%"></canvas>
     </div>
-  </div>
+
+  {% block script %}
+    <script>
+      var ctx = document.getElementById("myChart");
+      var myChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+              labels: [" Ofensivos", " Não Ofensivos", " Não Classificados"],
+              datasets: [{
+                  label: '# of Votes',
+                  data: [{{pos}}, {{neg}}, {{unclas}}],
+                  backgroundColor: [
+                      '#f44336',
+                      '#00c853',
+                      '#1e88e5',
+                  ],
+              }]
+          },
+          options: {
+            legend: {
+              position: 'bottom',
+            }
+          }
+      });
+      </script>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  {% endblock script %}
+
 {% endblock content %}
