@@ -10,3 +10,4 @@ project/static/CACHE/
 project/secret_key.txt
 media
 venv
+logs

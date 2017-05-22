@@ -57,7 +57,7 @@ def save_comment(text, user, news):
     text = re.sub("[^a-z ]", " ", text)
     text = re.sub(r"\b(.)\1{2,}", " ", text)
     text = text.split()
-    if len(text) > 3:
+    if len(text) > 3 and len(text) < 40:
         text = " ".join(text)
         try:
             Comment.objects.create(text=text, news=news, user=user)
