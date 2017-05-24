@@ -30,22 +30,16 @@ class Annotation(models.Model):
         return Annotation.objects.filter(annotator__email="teste@teste.com")
 
     def status():
-        comments = Comment.objects.all()
+        annotations = Annotation.objects.all().distinct('comment')
         pos = 0
         neg = 0
 
-        for comment in comments:
-            annotations = Annotation.objects.filter(comment=comment)
-            if len(annotations) == settings.N_RATERS:
-                yes = 0
-                for annotation in annotations:
-                    if annotation.is_hate_speech:
-                        yes += 1
-
-                if yes >= settings.MIN_AGREEMENT:
-                    pos += 1
-                else:
-                    neg += 1
+        for annotation in annotations:
+            n_annotations = Annotation.objects.filter(comment=annotation.comment, is_hate_speech=True).count()
+            if n_annotations == settings.N_RATERS:
+                pos += 1
+            else:
+                neg += 1
         return neg, pos
 
     def __str__(self):
