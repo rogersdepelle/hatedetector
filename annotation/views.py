@@ -26,9 +26,7 @@ def set_context(request):
 
 def home(request):
     context = set_context(request)
-    #context['neg'], context['pos'] = Annotation.status()
-    context['neg'] = 0
-    context['pos'] = 0
+    context['neg'], context['pos'] = Annotation.status()
     context['unclas'] = context['meta'] -context['neg'] - context['pos']
     return render(request, "home.html", context)
 
