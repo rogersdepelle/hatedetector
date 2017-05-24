@@ -18,6 +18,15 @@ class AnnotationForm(forms.ModelForm):
         self.fields['is_hate_speech'].label = ''
         self.fields['is_hate_speech'].required = True
 
+
+    def clean(self):
+        cleaned_data = super(AnnotationForm, self).clean()
+        if cleaned_data['is_hate_speech']:
+            if len(cleaned_data['kind']) < 1 and len(cleaned_data['other']) < 1:
+                self.add_error('kind', 'Selecione uma classe ou insira na campo outra')
+                raise ValidationError('Preencha os campos')
+        return cleaned_data
+
     class Meta:
         model = Annotation
         fields = ('is_hate_speech', 'kind', 'other')
