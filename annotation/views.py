@@ -65,13 +65,19 @@ def annotation(request):
     except:
         return redirect('home')
 
-    if annotator.approved == False:
-        return redirect('congrat')
-
     if annotator.approved:
-        comment, end = annotator.get_available()
-        if end:
-          return redirect('congrat')
+        if request.POST:
+            try:
+                comment = Comment.objects.get(id=request.POST['comment_id'])
+            except:
+                redirect('annotation')
+        else:
+            comment, end = annotator.get_available()
+            if end:
+              return redirect('congrat')
+
+    elif annotator.approved == False:
+        return redirect('congrat')
 
     elif annotator.approved == None:
         annotations = Annotation.get_pretest()

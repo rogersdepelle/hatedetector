@@ -40,6 +40,7 @@
         <a class="modal-trigger" href="#classes">Definições das Classes</a>
         |
         <a href="{% url 'home' %}">Sair</a>
+        <input type="number" hidden="true" name="comment_id" value="{{ comment.id }}">
         <input type="submit" class="{{ system.primary_color_hex }} btn right" value="Próximo">
       </div>
   </form>
@@ -68,25 +69,26 @@
     </div>
   </div>
 
-  {% block script %}
-    <script>
-      if(! $('[id="id_is_hate_speech_0"]').is(":checked")){
-        $('input[type="submit"]').prop('disabled', true);
+
+{% endblock content %}
+
+{% block script %}
+  <script>
+    if(! $('[id="id_is_hate_speech_0"]').is(":checked")){
+      $('input[type="submit"]').prop('disabled', true);
+      $('input[type="checkbox"]').prop('disabled', true);
+      $('input[type="text"]').prop('disabled', true);
+    }
+    $('[name="is_hate_speech"]').change(function() {
+      if($('[id="id_is_hate_speech_0"]').is(":checked")){
+          $('input[type="checkbox"]').prop('disabled', false);
+          $('input[type="text"]').prop('disabled', false);
+      }
+      else{
         $('input[type="checkbox"]').prop('disabled', true);
         $('input[type="text"]').prop('disabled', true);
       }
-      $('[name="is_hate_speech"]').change(function() {
-        if($('[id="id_is_hate_speech_0"]').is(":checked")){
-            $('input[type="checkbox"]').prop('disabled', false);
-            $('input[type="text"]').prop('disabled', false);
-        }
-        else{
-          $('input[type="checkbox"]').prop('disabled', true);
-          $('input[type="text"]').prop('disabled', true);
-        }
-        $('input[type="submit"]').prop('disabled', false);
-      });
-    </script>
-  {% endblock script %}
-
-{% endblock content %}
+      $('input[type="submit"]').prop('disabled', false);
+    });
+  </script>
+{% endblock script %}

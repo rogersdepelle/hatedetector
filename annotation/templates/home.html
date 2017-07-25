@@ -61,36 +61,36 @@
       <br><h5 class="center">Meta do Projeto</h5><br>
       <canvas id="myChart" width="100%" height="100%"></canvas>
       <p align="center">
-        Nossa meta é classificar {{ meta }} comentários, até o momentos já {{ neg|add:pos }} foram classificados.
+        Nossa meta é classificar {{ meta }} comentários, até o momentos {{ neg|add:pos }} foram classificados.
       </p>
     </div>
   </div>
 
-  {% block script %}
-    <script>
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-              labels: [" Ofensivos", " Não Ofensivos", " Não Classificados"],
-              datasets: [{
-                  label: '# of Votes',
-                  data: [{{pos}}, {{neg}}, {{unclas}}],
-                  backgroundColor: [
-                      '#f44336',
-                      '#00c853',
-                      '#1e88e5',
-                  ],
-              }]
-          },
-          options: {
-            legend: {
-              position: 'bottom',
-            }
-          }
-      });
-      </script>
-      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-  {% endblock script %}
-
 {% endblock content %}
+
+{% block script %}
+  <script>
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [" Ofensivos", " Não Ofensivos", " Não Classificados"],
+            datasets: [{
+                label: '# of Votes',
+                data: [{{pos}}, {{neg}}, {{unclas}}],
+                backgroundColor: [
+                    '#f44336',
+                    '#00c853',
+                    '#1e88e5',
+                ],
+            }]
+        },
+        options: {
+          legend: {
+            position: 'bottom',
+          }
+        }
+    });
+    </script>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+{% endblock script %}

@@ -3,6 +3,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 from comments.models import Comment
 
@@ -30,17 +31,9 @@ class Annotation(models.Model):
         return Annotation.objects.filter(annotator__email="teste@teste.com")
 
     def status():
-        annotations = Annotation.objects.all().distinct('comment')
-        pos = 0
-        neg = 0
-
-        for annotation in annotations:
-            n_annotations = Annotation.objects.filter(comment=annotation.comment, is_hate_speech=True).count()
-            if n_annotations == settings.N_RATERS:
-                pos += 1
-            else:
-                neg += 1
-        return neg, pos
+        total = Annotation.objects.values('comment').annotate(count=Count('comment')).filter(count__gte=3).count()
+        pos = Annotation.objects.filter(is_hate_speech=True).values('comment').annotate(count=Count('comment')).filter(count__gte=2).count()
+        return total - pos, pos
 
     def __str__(self):
         return str(self.is_hate_speech) + ' - ' + str(list(value['name'] for value in self.kind.values())) + ' - ' + self.comment.text
@@ -83,6 +76,11 @@ class Annotator(models.Model):
         self.save()
 
     def get_available(self):
+
+        total = Annotation.objects.values('comment__news__site').annotate(count=Count('comment__news__site')).filter(count__gte=3)
+
+        print(total)
+
         comments = Comment.objects.all()
         for comment in comments:
             if Annotation.objects.filter(comment=comment).count() < settings.N_RATERS and Annotation.objects.filter(comment=comment, annotator=self).count() == 0:
