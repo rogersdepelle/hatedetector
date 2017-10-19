@@ -3,9 +3,9 @@ import json
 from .main import *
 
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['hatedetector.ga, www.hatedetector.ga']
+ALLOWED_HOSTS = ['.hatedetector.org']
 
 CSRF_COOKIE_SECURE = False
 
