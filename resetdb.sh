@@ -10,6 +10,7 @@ rm */migrations/0*
 ./manage.py migrate
 
 ./manage.py loaddata project/fixtures/initial_data.json
-./manage.py loaddata project/fixtures/test.json
+./manage.py loaddata project/fixtures/dataset.json
+./manage.py loaddata project/fixtures/bk-16-10-17.json
 
 ./manage.py runserver

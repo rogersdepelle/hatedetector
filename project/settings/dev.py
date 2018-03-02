@@ -8,7 +8,7 @@ ALLOWED_HOSTS = []
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hatedetector',
+        'NAME': 'hatedetector.org',
         'USER': 'postgres',
         'PASSWORD': '2190',
         'CONN_MAX_AGE': 60,
